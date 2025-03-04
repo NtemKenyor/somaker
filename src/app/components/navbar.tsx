@@ -44,7 +44,7 @@ const Navbar = () => {
               <GiCancel style={{ display: open ? 'block' : 'none' }} onClick={handleToggle} size={17} />
 
               <Image alt="SoMaker" width={100} height={70} src="/logos/somaker-logo.svg" />
-              <button className="rounded-[30px] w-auto text-white text-[0.8rem] hover:border-gray-700 border-white border-[0.5px] py-3 px-4 lg:hidden hover:bg-gray-700">Button</button>
+              <button className="rounded-[30px] w-auto text-white text-[0.8rem] hover:border-gray-700 border-white border-[0.5px] py-3 px-4 lg:hidden hover:bg-gray-700">Get started</button>
 
 
 
@@ -169,7 +169,7 @@ const Navbar = () => {
 
           </div>
           <div className="navbar-end">
-            <button className="rounded-[30px] text-white hover:border-gray-700 border-white border-[0.5px] py-3 hidden lg:block lg:px-5 hover:bg-gray-700">Button</button>
+            <button className="rounded-[30px] text-white hover:border-gray-700 border-white border-[0.5px] py-3 hidden lg:block lg:px-5 hover:bg-gray-700">Get Started</button>
           </div>
         </div>
         {/* END OF WEB RESPONSIVENESS */}
