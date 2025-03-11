@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veilmatch</title>
+
+    <link rel="icon" type="image/webp" href="src/somaker.webp">
+
+    <!-- Load solana-web3.js -->
+    <script src="https://unpkg.com/@solana/web3.js@^1.32.0/lib/index.iife.min.js" defer></script> <!-- Solana SDK -->
+    <script src="js/forge.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    
+    <script src="js/general.js?ti=<?=time()?>" defer></script>
+
+    <link rel="stylesheet" href="styles/general.css?id=74657383758">
+    <link rel="stylesheet" href="styles/new_comers.css?id=74857384">
+    <link rel="stylesheet" href="styles/profile_and_post.css?id=847583735837">
+
+<style>
+
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header .logo {
+    height: 40px;
+    width: auto;
+}
+
+.header .menu-btn {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.header .header-menu {
+    display: flex;
+    gap: 20px;
+}
+
+.header .header-menu .menu-item {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.header .header-menu .menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+.header .header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header .balance {
+    font-weight: bold;
+    color: #555;
+}
+
+.header .create-post,
+.header .create-account {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.header .create-post:hover,
+.header .create-account:hover {
+    background-color: #0056b3;
+}
+
+.header #accountIcon {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.header #accountIcon:hover {
+    background-color: #f0f0f0;
+}
+
+/* Main Content Styles */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+}
+
+.post_arena {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.post .shimmer-placeholder {
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.post .username {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.post .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.post .content {
+    color: #555;
+    line-height: 1.6;
+}
+
+.post .date {
+    font-size: 12px;
+    color: #888;
+    margin-top: 10px;
+}
+
+.post .author {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Profile Pop-Up Styles */
+.profilepopup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.profilepopup-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.profilepopup .profileclose-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.popup-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.popup-header .person-icon {
+    fill: #007bff;
+}
+
+.popup-body h2 {
+    margin: 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+.popup-body .change-btn {
+    display: block;
+    margin: 10px auto;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.popup-body .change-btn:hover {
+    background-color: #0056b3;
+}
+
+.key-container,
+.email-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.key-container span,
+.email-container input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.copy-btn {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.copy-btn:hover {
+    background-color: #218838;
+}
+
+.profile-actions {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.profile-actions li {
+    margin: 10px 0;
+}
+
+.profile-actions .profile_btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile-actions .profile_btn:hover {
+    background-color: #ddd;
+}
+
+/* Wallet Modal Styles */
+.wallet-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.wallet-modal-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.wallet-modal-content h2 {
+    margin: 0 0 20px;
+}
+
+.wallet-modal-content button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.wallet-modal-content button:hover {
+    background-color: #0056b3;
+}
+
+/* Post Pop-Up Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.popup-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.popup-content .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.popup-content h2 {
+    margin: 0 0 20px;
+}
+
+.popup-content input,
+.popup-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.popup-content .counter {
+    text-align: right;
+    font-size: 12px;
+    color: #888;
+}
+
+.popup-content .markdownTools {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.popup-content .markdownTools button {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.popup-content .markdownTools button:hover {
+    background-color: #ddd;
+}
+
+.popup-content .submitor {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.popup-content .submitor:hover {
+    background-color: #0056b3;
+}
+
+/* Unique Slide Container Styles */
+.unique-slide-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.unique-slide-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #007bff, #00ff88);
+    opacity: 0.8;
+}
+
+.unique-slide-show {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+
+.unique-slide-content {
+    text-align: center;
+}
+
+.unique-slide-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.unique-slide-text {
+    color: #555;
+    line-height: 1.6;
+}
+
+.unique-slide-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.unique-slide-buttons button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.unique-slide-buttons button:hover {
+    background-color: #0056b3;
+}
+
+/* Toast Styles */
+#toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    z-index: 200;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .header .menu-btn {
+        display: block;
+    }
+
+    .header .header-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .header .header-menu.active {
+        display: flex;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <img src="src/somaker.webp" alt="VeilMatch Logo" class="logo">
+            <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
+            <div class="header-menu">
+                <a href="#" id="home" class="menu-item">Home</a>
+                <a href="#" id="message_item" class="menu-item">Chats</a>
+                <a href="#" id="about_us" class="menu-item">White-Paper</a>
+            </div>
+            <div class="header-icons">
+                <div class="balance" id="balance">Balance: 0 SOL</div>
+                <button class="create-post" id="createPostBtn" style="display: none;">Create Post</button>
+                <button class="create-account" id="createAccountBtn" style="display: none;">Create Wallet</button>
+                <div id="accountIcon" style="display: none;" onclick="toggleProfilePopup()">
+                    <!-- SVG icon representing the user -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="main-content">
+            <div class="post_arena" id="d_post_arena">
+                <!-- Post 1 -->
+                <div class="post">
+                    <div class="shimmer-placeholder"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
+                    </svg>
+                    <span class="username">John Doe</span>
+                    <div class="title">Processing Title...</div>
+                    <div class="content">Loading...</div>
+                    <div class="date">2025-11-13</div>
+                    <div class="author">Posted by: John Doe</div>
+                </div>
+
+                <!-- Post 2 -->
+                <div class="post">
+                    <div class="shimmer-placeholder"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
+                    </svg>
+                    <span class="username">Jane Smith</span>
+                    <div class="title">Processing Title...</div>
+                    <div class="content">Loading...</div>
+                    <div class="date">2025-11-13</div>
+                    <div class="author">Posted by: Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Pop-Up Container -->
+        <div id="profilepopup" class="profilepopup">
+            <div class="profilepopup-content">
+                <button class="profileclose-btn">&times;</button>
+                <div class="popup-header">
+                    <svg class="person-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="50px" height="50px">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 2 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>
+                <div class="popup-body">
+                    <h2 contenteditable="true" id="displayName">Your Display Name</h2>
+                    <button id="saveDisplayName" class="change-btn">Change</button>
+
+                    <br/><br/><br/>
+                    <p>Wallet Public Key</p>
+                    <div class="key-container">
+                        <span contenteditable="true" id="publicKey">abc123xyz</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+
+                    <br/>
+                    <p>Email</p>
+                    <div class="email-container">
+                        <input type="email" id="email_displayer" value="youremail@example.com"/>
+                        <button id="changeEmail" class="change-btn">Change</button>
+                    </div>
+
+                    <ol class="profile-actions">
+                        <li>
+                            <button id="prof_share" class="profile_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M13 3a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 11-2 0V5.41l-7.29 7.3a1 1 0 01-1.42 0l-2-2a1 1 0 011.42-1.42L13 9.59 18.59 4H14a1 1 0 01-1-1zM5 4a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3v-1a1 1 0 112 0v1a5 5 0 01-5 5H5a5 5 0 01-5-5V7a5 5 0 015-5h1a1 1 0 110 2H5z"/>
+                                </svg>
+                            </button>
+                        </li>
+                        <li>
+                            <button id="prof_message" class="profile_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M4 5a3 3 0 00-3 3v8a3 3 0 003 3h12a3 3 0 003-3V8a3 3 0 00-3-3H4zm14 9H4V8h14v6zm-2.293-4.707a1 1 0 10-1.414 1.414L17.586 12l-2.293 2.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414l-3-3z"/>
+                                </svg>
+                            </button>
+                        </li>
+                        <li>
+                            <button id="prof_download" class="profile_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M12 2a1 1 0 011 1v11.586l3.293-3.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L11 14.586V3a1 1 0 011-1zM4 19a1 1 0 110-2h16a1 1 0 110 2H4z"/>
+                                </svg>
+                            </button>
+                        </li>
+                        <li>
+                            <button id="prof_logout" class="profile_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M7 3a1 1 0 100 2h10a1 1 0 100-2H7zm5 4a1 1 0 011 1v6a1 1 0 102 0V8a3 3 0 00-3-3h-2a1 1 0 100 2h2zm7 9a3 3 0 01-3 3H7a3 3 0 01-3-3V8a3 3 0 013-3h7v2H7a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1v-1a1 1 0 112 0v1z"/>
+                                </svg>
+                            </button>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallet Modal -->
+        <div class="wallet-modal" id="walletModal">
+            <div class="wallet-modal-content">
+                <span class="close-modal" onclick="closeWalletModal()">&times;</span>
+                <h2>Create or Load Wallet</h2>
+                <p>Would you like to create a new wallet or upload a private key for an existing one?</p>
+                <button onclick="createWallet()">Create New Wallet</button>
+                <input type="file" id="uploadKeyFile" style="display:none;" onchange="loadPrivateKeyFile(event)">
+                <button onclick="document.getElementById('uploadKeyFile').click()">Upload Private Key</button>
+            </div>
+        </div>
+
+        <!-- Some little toast -->
+        <div id="toast" style="position:fixed; bottom:20px; right:20px; background: #333; color: white; padding: 10px; border-radius: 5px; display:none; z-index: 200;"></div>
+
+        <!-- Post Pop-Up Container -->
+        <div id="postPopup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" id="closePopup">&times;</span>
+                <h2>Create a Post</h2>
+                <form id="postForm">
+                    <input type="text" maxlength="50" id="title" placeholder="Post Title">
+                    <div class="counter" id="titleCounter">0 / 50</div>
+
+                    <textarea id="content" maxlength="800" placeholder="Write your post here..." rows="10"></textarea>
+                    <div class="counter-textarea" id="contentCounter">0 / 800</div>
+
+                    <div id="markdownTools">
+                        <button type="button" data-tag="**">Bold</button>
+                        <button type="button" data-tag="_">Italic</button>
+                        <button type="button" data-tag="### ">Heading</button>
+                        <button type="button" id="insertImage">Image</button>
+                        <button type="button" id="insertLink">Link</button>
+                        <button type="button" id="insertIframe">Iframe</button>
+                        <button type="button" id="insertVideo">Video</button>
+                        <button type="button" id="insertAudio">Audio</button>
+                    </div>
+
+                    <button class="more_button" id="moreButton" type="button">More</button>
+                    
+                    <input type="text" maxlength="500" id="image_url" placeholder="Image URL">
+                    <div class="counter" id="image_urlCounter">0 / 500</div>
+
+                    <input type="text" id="author" placeholder="Author (optional)">
+                    <input type="text" id="others" style="display: none;" placeholder="Unique Tips">
+                    <button type="button" class="submitor" id="postButtonSubmitor">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Unique Slide Container -->
+        <div class="unique-slide-container" id="unique-slide-container">
+            <div id="unique-close-button" class="unique-close-button" onclick="document.getElementById('unique-slide-container').remove();">✖</div>
+            <div class="unique-slide-background"></div>
+            <div class="unique-slide-show" id="unique-slide-show">
+                <div class="unique-slide-content">
+                    <div class="unique-slide">
+                        <div class="category-header" id="unique-slide-category"></div>
+                        <svg id="unique-slide-icon" class="category-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <div class="unique-slide-title" id="unique-slide-title"></div>
+                        <p class="unique-slide-text" id="unique-slide-text"></p>
+                        <div class="unique-slide-buttons">
+                            <button id="unique-prev-btn" class="unique-prev-btn">Back</button>
+                            <button id="unique-next-btn" class="unique-next-btn">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/profile_and_post.js?tim=<?=time()?>" defer></script>
+        <script src="js/new_comers.js?t=<?=time()?>" ></script>
+    </div>
+</body>
+</html>

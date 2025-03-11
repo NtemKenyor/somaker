@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoMaker - Game Creator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #121212;
+            color: white;
+        }
+        header {
+            background: #1E1E1E;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            display: flex;
+            flex: 1;
+        }
+        .sidebar {
+            width: 250px;
+            background: #222;
+            padding: 20px;
+            box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        .sidebar h3 {
+            cursor: pointer;
+            margin: 10px 0;
+            padding: 10px;
+            background: #333;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sidebar h3:hover {
+            background: #444;
+        }
+        .sidebar .content {
+            display: none;
+            margin-top: 10px;
+        }
+        .sidebar .content.active {
+            display: block;
+        }
+        .grid-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+        }
+        .grid-box div {
+            background: #333;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .grid-box div:hover {
+            transform: scale(1.05);
+            background: #444;
+        }
+        .template-item {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .template-item:hover {
+            transform: scale(1.02);
+            background: #444;
+        }
+        .template-item img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .template-item p {
+            text-align: center;
+            margin: 10px 0 0;
+            font-size: 14px;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .game-display, .code-box {
+            flex: 1;
+            background: #1E1E1E;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s;
+        }
+        .code-box {
+            display: none;
+            background: #000;
+            color: lime;
+            font-family: 'Courier New', monospace;
+        }
+        .bottom-input {
+            display: flex;
+            padding: 15px;
+            background: #1E1E1E;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .bottom-input input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #333;
+            color: white;
+        }
+        .bottom-input button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background: lime;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .bottom-input button:hover {
+            background: #32CD32;
+        }
+        .launch-button {
+            background: #FF5722;
+            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .launch-button:hover {
+            background: #E64A19;
+        }
+        .emoji {
+            font-size: 24px;
+        }
+
+
+
+
+        /* Add all previous styles here */
+        .profile-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .profile-popup {
+            display: none;
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .profile-popup.active {
+            display: block;
+        }
+
+
+        /* Add all previous styles here */
+        .loading-spinner {
+            display: none;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid lime;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #444;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .code-block {
+            background: #1E1E1E;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            color: lime;
+        }
+    </style>
+</head>
+<body>
+    <header>SoMaker - AI Game Creator 🎮</header>
+    <div class="profile-icon" onclick="toggleProfilePopup()">👤</div>
+    <div class="profile-popup" id="profilePopup">
+        <p>Solana Address: <span id="solanaAddress"></span></p>
+    </div>
+    
+    <div class="container">
+        <div class="sidebar">
+            <!-- Recent Projects Section -->
+            <div class="recent-projects">
+                <h3 onclick="toggleSection('projects')">Recent Projects 📂 <span>▼</span></h3>
+                <div id="projects" class="content">
+                    <ul id="projectList"></ul>
+                </div>
+            </div>
+
+
+            <!-- Emojis Section -->
+            <h3 onclick="toggleSection('emojis')">Emojis 😊 <span>▼</span></h3>
+            <div id="emojis" class="content">
+                <div class="grid-box">
+                    <div>😀</div>
+                    <div>😎</div>
+                    <div>👾</div>
+                    <div>🦄</div>
+                    <div>🐉</div>
+                    <div>🚀</div>
+                    <div>🌈</div>
+                    <div>🎨</div>
+                </div>
+            </div>
+
+            <!-- Platformers Section -->
+            <h3 onclick="toggleSection('platformers')">Platformers 🏃‍♂️ <span>▼</span></h3>
+            <div id="platformers" class="content">
+                <div class="grid-box">
+                    <div>👤</div>
+                    <div>👥</div>
+                    <div>🔼</div>
+                    <div>🔽</div>
+                    <div>◀️</div>
+                    <div>▶️</div>
+                </div>
+            </div>
+
+            <!-- Effects Section -->
+            <h3 onclick="toggleSection('effects')">Effects ✨ <span>▼</span></h3>
+            <div id="effects" class="content">
+                <div class="grid-box">
+                    <div>💥</div>
+                    <div>🔥</div>
+                    <div>💧</div>
+                    <div>⚡</div>
+                </div>
+            </div>
+
+            <!-- Templates Section -->
+            <h3 onclick="toggleSection('templates')">Templates 📄 <span>▼</span></h3>
+            <div id="templates" class="content">
+                <div class="template-item" onclick="addTemplate('3-Way Race', '🏁', '<h1>3-Way Race</h1><p>Race against opponents in a thrilling 3-way competition!</p>')">
+                    <div class="emoji">🏁</div>
+                    <p>3-Way Race</p>
+                </div>
+                <div class="template-item" onclick="addTemplate('3D Race', '🚗', '<h1>3D Race</h1><p>Experience high-speed racing in a 3D environment!</p>')">
+                    <div class="emoji">🚗</div>
+                    <p>3D Race</p>
+                </div>
+                <div class="template-item" onclick="addTemplate('Gravity Game', '🌍', '<h1>Gravity Game</h1><p>Defy gravity and solve puzzles in space!</p>')">
+                    <div class="emoji">🌍</div>
+                    <p>Gravity Game</p>
+                </div>
+                <div class="template-item" onclick="addTemplate('Detection Game', '🔍', '<h1>Detection Game</h1><p>Find hidden objects and solve mysteries!</p>')">
+                    <div class="emoji">🔍</div>
+                    <p>Detection Game</p>
+                </div>
+                <div class="template-item" onclick="addTemplate('Fight Game', '🥊', '<h1>Fight Game</h1><p>Battle opponents and become the champion!</p>')">
+                    <div class="emoji">🥊</div>
+                    <p>Fight Game</p>
+                </div>
+            </div>
+
+            <!-- Launch Button -->
+            <button class="launch-button" onclick="launchGame()">Launch Game 🚀</button>
+        </div>
+
+        <!-- <div class="main-content">
+            <div class="game-display" id="gameOutput"></div>
+            <div class="code-box" id="codeOutput"></div>
+        </div> -->
+        <div class="main-content">
+            <div id="gameOutputContainer" class="iframe-container">
+                <iframe id="gameOutput"></iframe>
+            </div>
+            <div class="code-box" id="codeOutput"></div>
+            <div class="code-block" id="otherCodeOutput"></div>
+        </div>
+
+    </div>
+   <!--  <div class="bottom-input">
+        <input type="text" id="gamePrompt" placeholder="Enter your game prompt...">
+        <button onclick="generateGame()">Generate 🚀</button>
+        <button onclick="toggleMode()">Toggle View 🔄</button>
+    </div> -->
+    <div class="bottom-input">
+        <input type="text" id="gamePrompt" placeholder="Enter your game prompt...">
+        <button id="generateButton" onclick="generateGame()">Generate 🚀</button>
+        <div class="loading-spinner" id="loadingSpinner"></div>
+        <button onclick="toggleMode()">Toggle View 🔄</button>
+    </div>
+    <script>
+        let showCode = false;
+        let currentProject = null;
+
+        // Toggle sidebar sections
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            section.classList.toggle('active');
+        }
+
+        // Save game state to LocalStorage
+        function saveGameState(projectName) {
+            const gameOutput = document.getElementById('gameOutput').innerHTML;
+            const codeOutput = document.getElementById('codeOutput').textContent;
+
+            const project = {
+                name: projectName,
+                gameOutput,
+                codeOutput,
+                timestamp: new Date().toISOString(),
+            };
+
+            // Save to LocalStorage
+            localStorage.setItem(projectName, JSON.stringify(project));
+
+            // Update recent projects list
+            updateRecentProjects();
+        }
+
+        // Load game state from LocalStorage
+        function loadGameState(projectName) {
+            const project = JSON.parse(localStorage.getItem(projectName));
+            if (project) {
+                document.getElementById('gameOutput').innerHTML = project.gameOutput;
+                document.getElementById('codeOutput').textContent = project.codeOutput;
+                currentProject = projectName;
+            }
+        }
+
+        // Update recent projects list in the sidebar
+        function updateRecentProjects() {
+            const projectList = document.getElementById('projectList');
+            projectList.innerHTML = '';
+
+            const projects = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('project_')) {
+                    const project = JSON.parse(localStorage.getItem(key));
+                    projects.push(project);
+                }
+            }
+
+            // Sort projects by timestamp (newest first)
+            projects.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            // Display projects in the list
+            projects.forEach((project) => {
+                const li = document.createElement('li');
+                li.textContent = project.name;
+                li.onclick = () => loadGameState(project.name);
+                projectList.appendChild(li);
+            });
+        }
+
+        // Generate a unique project name
+        function generateProjectName() {
+            let projectCount = 0;
+            while (localStorage.getItem(`project_${projectCount}`)) {
+                projectCount++;
+            }
+            return `project_${projectCount}`;
+        }
+
+        // Add template to gameOutput and codeOutput
+        function addTemplate(title, emoji, htmlContent) {
+            const gameOutput = document.getElementById('gameOutput');
+            const codeOutput = document.getElementById('codeOutput');
+
+            // Add HTML to gameOutput
+            gameOutput.innerHTML = htmlContent;
+
+            // Add HTML code to codeOutput
+            codeOutput.textContent = htmlContent;
+
+            // Auto-save the game state
+            if (!currentProject) {
+                currentProject = generateProjectName();
+            }
+            saveGameState(currentProject);
+        }
+
+        // Generate game based on prompt
+        function generateGame() {
+            const prompt = document.getElementById("gamePrompt").value;
+            const gameHTML = `<h2>${prompt}</h2><p>Sample game generated... 🎉</p>`;
+            document.getElementById("gameOutput").innerHTML = gameHTML;
+            document.getElementById("codeOutput").textContent = gameHTML;
+
+            // Auto-save the game state
+            if (!currentProject) {
+                currentProject = generateProjectName();
+            }
+            saveGameState(currentProject);
+        }
+
+        // Toggle between game and code view
+        function toggleMode() {
+            showCode = !showCode;
+            // document.getElementById("gameOutput").style.display = showCode ? "none" : "block";
+            document.getElementById("gameOutputContainer").style.display = showCode ? "none" : "block";
+            document.getElementById("codeOutput").style.display = showCode ? "block" : "none";
+        }
+
+        // Launch game
+        function launchGame() {
+            alert("Game launched successfully! 🎮");
+        }
+
+        // On page load, load the most recent project
+        window.onload = () => {
+            updateRecentProjects();
+            const projects = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('project_')) {
+                    const project = JSON.parse(localStorage.getItem(key));
+                    projects.push(project);
+                }
+            }
+            if (projects.length > 0) {
+                const mostRecentProject = projects.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+                loadGameState(mostRecentProject.name);
+            }
+        };
+
+        
+    </script>
+
+
+<script>
+    // let showCode = false;
+    // let currentProject = null;
+
+    // Generate a default Solana public address
+    function generateSolanaAddress() {
+        const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+        let address = 'Solana';
+        for (let i = 0; i < 32; i++) {
+            address += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return address;
+    }
+
+    // Save Solana address to LocalStorage
+    function saveSolanaAddress() {
+        if (!localStorage.getItem('solanaAddress')) {
+            const address = generateSolanaAddress();
+            localStorage.setItem('solanaAddress', address);
+        }
+    }
+
+    // Display Solana address in the profile popup
+    function displaySolanaAddress() {
+        const address = localStorage.getItem('solanaAddress');
+        document.getElementById('solanaAddress').textContent = address;
+    }
+
+    // Toggle profile popup
+    function toggleProfilePopup() {
+        const popup = document.getElementById('profilePopup');
+        popup.classList.toggle('active');
+    }
+
+    // Extract HTML, CSS, and JavaScript from the AI response
+    function extractCodeBlocks(response) {
+        const htmlRegex = /```html([\s\S]*?)```/;
+        const cssRegex = /```css([\s\S]*?)```/;
+        const jsRegex = /```javascript([\s\S]*?)```/;
+
+        const html = response.match(htmlRegex)?.[1]?.trim() || '';
+        const css = response.match(cssRegex)?.[1]?.trim() || '';
+        const js = response.match(jsRegex)?.[1]?.trim() || '';
+
+        return { html, css, js };
+    }
+
+    let URL__ = "http://localhost:3000";
+
+    // Send game prompt to the Node server
+    async function generateGame() {
+        const prompt = document.getElementById("gamePrompt").value;
+        const solanaAddress = localStorage.getItem('solanaAddress');
+
+        if (!prompt) {
+            alert("Please enter a game prompt!");
+            return;
+        }
+
+        // Show loading spinner and disable generate button
+        document.getElementById('generateButton').style.display = 'none';
+        document.getElementById('loadingSpinner').style.display = 'inline-block';
+
+        try {
+            const response = await fetch(URL__+'/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt, solanaAddress }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to generate game content');
+            }
+
+            const data = await response.json();
+            const { html, css, js } = extractCodeBlocks(data.content);
+
+            // Render HTML in iframe
+            const iframe = document.getElementById('gameOutput');
+            
+
+            let fullHTML = html;
+            // If the HTML contains a </head> tag, insert the CSS and JS just before it.
+            // if (fullHTML.includes('</head>')) {
+            // } 
+            // else {
+            //     // If not, prepend them to the HTML.
+            // }
+
+            iframe.srcdoc = fullHTML;
+
+
+            // Display HTML code in codeOutput
+            // document.getElementById('codeOutput').textContent = html;
+            document.getElementById('codeOutput').textContent = fullHTML;
+
+            // Display other code blocks (CSS, JS) in otherCodeOutput
+            const otherCode = [];
+            if (css) otherCode.push(`/* CSS */\n${css}`);
+            if (js) otherCode.push(`/* JavaScript */\n${js}`);
+            document.getElementById('otherCodeOutput').textContent = otherCode.join('\n\n');
+
+            // Auto-save the game state
+            if (!currentProject) {
+                currentProject = generateProjectName();
+            }
+            saveGameState(currentProject);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to generate game content. Please try again.');
+        } finally {
+            // Hide loading spinner and show generate button
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('generateButton').style.display = 'inline-block';
+        }
+    }
+
+    // On page load, initialize Solana address and load recent projects
+    window.onload = () => {
+        saveSolanaAddress();
+        displaySolanaAddress();
+        updateRecentProjects();
+        const projects = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('project_')) {
+                const project = JSON.parse(localStorage.getItem(key));
+                projects.push(project);
+            }
+        }
+        if (projects.length > 0) {
+            const mostRecentProject = projects.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+            loadGameState(mostRecentProject.name);
+        }
+    };
+</script>
+
+</body>
+</html>
