@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoMaker - Game Creator</title>
+    <link rel="icon" type="image/webp" href="src/somaker.webp">
+
+    <script src="https://unpkg.com/@solana/web3.js@^1.32.0/lib/index.iife.min.js" defer></script> <!-- Solana SDK -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/node-forge@0.10.0/dist/forge.min.js" defer></script> -->
+    <!-- <script src="js/forge.min.js" defer></script> -->
+    <!-- <script src="js/marked.min.js" defer></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    
+    <script src="js/game_dashboard.js?id=84938596892" defer></script>
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -273,13 +283,96 @@
             cursor: pointer;
         }
     </style>
+    <style>
+        /* Smooth fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        /* Profile Popup Styling */
+        .profile-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #1e1e2f, #3a3a5e);
+            color: #fff;
+            padding: 20px;
+            width: 300px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+            font-family: 'Arial', sans-serif;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-in-out;
+            transition: all 0.3s ease-in-out;
+        }
+    
+        /* Solana Logo */
+        .solana-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+    
+        .solana-logo img {
+            width: 50px;
+            height: auto;
+        }
+    
+        /* Wallet Text */
+        .profile-popup p {
+            margin: 8px 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+    
+        /* Address & Balance Styling */
+        #solanaAddress {
+            font-weight: bold;
+            color: #9efeff;
+            word-break: break-all;
+            margin-left: 8px;
+        }
+    
+        #balance {
+            font-weight: bold;
+            color: #ffdd57;
+            font-size: 18px;
+        }
+    
+        /* Cool Emoji Icons */
+        .emoji {
+            margin-right: 8px;
+        }
+    
+        /* Hover effect */
+        .profile-popup:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    
+    
+
+    
 </head>
 <body>
     <header>SoMaker - AI Game Creator 🎮</header>
     <div class="profile-icon" onclick="toggleProfilePopup()">👤</div>
-    <div class="profile-popup" id="profilePopup">
+    <!-- <div class="profile-popup" id="profilePopup">
         <p>Solana Address: <span id="solanaAddress"></span></p>
+    </div> -->
+    <!-- Wallet Pop-up UI -->
+    <div class="profile-popup" id="profilePopup">
+        <div class="solana-logo">
+            <img src="https://cryptologos.cc/logos/solana-sol-logo.png" alt="Solana Logo">
+        </div>
+        <p><span class="emoji">💰</span> Solana Address: <span id="solanaAddress"></span></p>
+        <p><span class="emoji">⚡</span> <span id="balance">Balance: Loading...</span></p>
     </div>
+
     <div class="container">
         <div class="sidebar">
             <!-- Recent Projects Section -->

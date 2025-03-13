@@ -1159,6 +1159,47 @@ async function d_post_sharer(entry){
     });
 }
 
+async function d_main_play(entry) {
+    try {
+        // Extract content from metadata
+        let content = entry.metadata.content;
+
+        // Use regex to extract the URL inside {{element|type=iframe|src=URL}}
+        let match = content.match(/{{element\|type=iframe\|src=(.*?)}}/);
+        if (!match || !match[1]) {
+            console.error("No valid URL found in content");
+            return;
+        }
+
+        let url = match[1]; // Extracted URL
+
+        // Create a new window and write the iframe into it
+        let newWindow = window.open("", "_blank");
+        if (newWindow) {
+            newWindow.document.write(`
+                <html>
+                <head>
+                    <title>${entry.metadata.title}</title>
+                    <style>
+                        body { margin: 0; overflow: hidden; }
+                        iframe { width: 100vw; height: 100vh; border: none; }
+                    </style>
+                </head>
+                <body>
+                    <iframe src="${url}" allowfullscreen></iframe>
+                </body>
+                </html>
+            `);
+            newWindow.document.close();
+        } else {
+            console.error("Failed to open new window");
+        }
+    } catch (error) {
+        console.error("Error in d_main_play:", error);
+        alert("We faced some issues in loading the Game.");
+    }
+}
+
 
 
 async function d_post_liker(entry){

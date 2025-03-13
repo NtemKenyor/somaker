@@ -23,7 +23,7 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #ff4d4d, #4dafff);
+            background: linear-gradient(135deg, #00E7FF, #8A00FF, #FF007F);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -310,7 +310,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="menu-bar" id="d_menu_bar" onclick="toggleSidebar()">☰ Menu</div>
+        <div class="menu-bar" id="d_menu_bar" onclick="toggleTopbar()">☰ Menu</div>
         <div class="sidebar" id="d_sidebar">
             <h2>Conversations</h2>
             <div id="conversations-list">
@@ -354,7 +354,7 @@
 
     <!-- <script>
 
-        function toggleSidebar() {
+        function toggleTopbar() {
             const sidebar = document.querySelector('.sidebar');
             sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
         }

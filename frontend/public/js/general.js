@@ -1,6 +1,7 @@
 // Toggle Sidebar Function
-function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
+function toggleTopbar() {
+    // const sidebar = document.querySelector('.sidebar');
+    const sidebar = document.querySelector('.topbar');
     const mainContent = document.querySelector('.main-content');
     sidebar.classList.toggle('active');
     mainContent.classList.toggle('active');
@@ -314,103 +315,6 @@ async function setupNetwork(network="mainnet"){
     console.log("Current Blockchain Network:", window.connection);
 }
 
-
-// Initialize global variables using the window object
-/* if (
-    window.location.hostname === "localhost" || 
-    window.location.hostname.startsWith("127.") || 
-    window.location.hostname === "0.0.0.0"
-) {
-    // Use localhost URLs
-    window.NODE_URL = "http://localhost:3000/veilmatch/backend";
-    window.PHP_URL = "http://localhost/cloudS/interact/server";
-    window.connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
-} else {
-    // Use live URLs
-    window.NODE_URL = "https://roynek.com/veilmatch/backend";
-    // window.NODE_URL = "http://localhost:3000/program-NtemKenyor/backend"; // jUST NODE LOCALHOST TO TEST HERE..
-    window.PHP_URL = "https://roynek.com/cloudS/interact/server";
-    window.connection = new solanaWeb3.Connection('https://spring-quick-surf.solana-devnet.quiknode.pro/016ff48f0f7c3f1520e515c01dca9a83ef528317 ', 'confirmed');
-} */
-
-
-/* async function loadPosts() {
-    try {
-        const response = await fetch(window.NODE_URL+"/api/metadata");
-        const data = await response.json();
-
-        console.log("Fetched Data:", data);
-
-        // Try to sort posts
-        const sortedData = sortPostsByDate(data);
-
-        const postsContainer = document.getElementById("d_post_arena");
-        postsContainer.innerHTML = "";
-
-        sortedData.forEach((entry) => {
-            const post = entry.metadata;
-            const postDiv = document.createElement("div");
-            postDiv.className = "post";
-
-            // Trim lengthy author names and add tooltip/popover for the full content
-            const trimmedAuthor = post.author.length > 15 
-                ? `${post.author.slice(0, 12)}...` 
-                : post.author;
-
-            const imageTag = post.image_url ? `<img src="${post.image_url}" alt="Post Image">` : "";
-            const titleDiv = post.title ? `<div class="title">${post.title}</div>` : "";
-
-            // Convert markdown to HTML content
-            const postContent = convertMarkdownToHtml(post.content);
-
-            postDiv.innerHTML = `
-                ${imageTag}
-                <div class="post-header">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="7" r="4"></circle>
-                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
-                    </svg>
-                    <span class="username" title="${post.author}">${trimmedAuthor}</span>
-                </div>
-                ${titleDiv}
-                <div class="content">${postContent}</div>
-                <div class="date">${post.date}</div>
-                <div class="author">Posted by: ${post.author}</div>
-                <div class="post-actions">
-                    <button class="like-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
-                            <path d="M8.864.46c-.743-.794-1.97-.795-2.714-.003-.329.354-.597.906-.89 1.54-.29.632-.591 1.295-.806 1.977-.214.678-.432 1.519-.579 2.59-.146 1.053-.279 2.113-.34 2.978h4.448c.416 0 .768.275.855.68l.262 1.18c.117.523.323.799.543.9.227.106.462.113.774.113.303 0 .616-.002.927-.002.682 0 1.423.078 2.02.482.604.407.993 1.105.993 2.516 0 .87-.256 1.336-.638 1.52-.369.177-.874.255-1.304.255-.393 0-.897-.065-1.261-.264-.366-.199-.632-.513-.762-.857a1.5 1.5 0 0 1-.781 1.008c-.406.228-.91.306-1.349.306H9c-1.454 0-2.208-.895-2.438-1.745l-.766-3.532H1.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .5-.5H6c.015-.513.022-1.024.05-1.548.036-.619.093-1.252.175-1.885.165-1.263.402-2.507.682-3.368C7.1 1.393 7.345.99 7.598.773 7.861.548 8.142.45 8.864.46z"/>
-                        </svg>
-                        Like
-                    </button>
-                    <button class="share-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                            <path d="M13.5 1a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5h-7a1.5 1.5 0 0 1-1.5-1.5V5.707l-2.146 2.147a.5.5 0 0 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V9h5V2.5A1.5 1.5 0 0 1 13.5 1z"/>
-                        </svg>
-                        Share
-                    </button>
-                </div>
-            `;
-
-            // Add event listeners for like and share buttons
-            postDiv.querySelector(".like-button").addEventListener("click", (event) => {
-                event.stopPropagation();
-                alert(`You liked: "${post.title}"`);
-            });
-
-            postDiv.querySelector(".share-button").addEventListener("click", (event) => {
-                event.stopPropagation();
-                alert(`You shared: "${post.title}"`);
-            });
-
-            postsContainer.appendChild(postDiv);
-        });
-    } catch (error) {
-        console.error("Error fetching posts:", error);
-    }
-}
-*/
-
 const default_post = [
     {
         "pubkey": "5vDfnGGr6VzDCM2hAtCx3h1G113FC5SFm5hMs88Nf7yR",
@@ -423,138 +327,7 @@ const default_post = [
             "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"BSsCnFimdYBKhrt4gvaCePxiXcooVZvexs39yEzwoMp1\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
         }
     },
-    {
-        "pubkey": "7e7hsdUV7zYHFocoDqL6TDBBtt28Z1o9sTj3aThPrQx8",
-        "metadata": {
-            "title": "",
-            "content": "Glad to be here and thank you all for having me.",
-            "image_url": "",
-            "author": "BSsCnFimdYBKhrt4gvaCePxiXcooVZvexs39yEzwoMp1",
-            "date": "2024-12-22T08:20:28.863Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"BSsCnFimdYBKhrt4gvaCePxiXcooVZvexs39yEzwoMp1\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "6EeY4ZMyWBzJZktvmb3ssW2U7u3XhJspn3kWCvAy4JAm",
-        "metadata": {
-            "title": "Love can break boundaries .",
-            "content": "Love is in the air.\n\n![Image Description](https://i.pinimg.com/originals/46/6d/e2/466de2542ca09cc32296f192828ca97f.jpg)",
-            "image_url": "",
-            "author": "Caterine",
-            "date": "2024-12-05T08:35:06.671Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "D4dmhxMz8hC3giooJGu5ZgSMhh3UZawcoZZTNqYwJiEZ",
-        "metadata": {
-            "title": "",
-            "content": "I love sharing my ideas with my man.\n\n![Image Description](https://img.freepik.com/free-photo/sexy-business-woman-wearing-blue-suit-sitting-summer-cafe_285396-7921.jpg)",
-            "image_url": "",
-            "author": "CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP",
-            "date": "2024-12-05T08:33:10.923Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "CkbgVhTUYZqhRd5AcRvHKTiWztKBozPvnFVhmnvq5NxT",
-        "metadata": {
-            "title": "",
-            "content": "Protecting my personality and beauty.\n\n![Image Description](https://i0.wp.com/hellobombshell.com/wp-content/uploads/2018/11/aissatatdiallo_93101829_3163076930391575_4234537518130603650_n.jpg)",
-            "image_url": "",
-            "author": "CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP",
-            "date": "2024-12-05T08:31:22.163Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "BcPTqZjSrhLdDenoayb2Mjkt6Ki9rEbgDbf4neby9HCG",
-        "metadata": {
-            "title": "",
-            "content": "Love is all I want.\n\n![Image Description](https://i0.wp.com/hellobombshell.com/wp-content/uploads/2020/10/megan.milan_93029884_101970378117711_6091947512926847953_n.jpg?resize=820%2C1024&ssl=1)",
-            "image_url": "",
-            "author": "CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP",
-            "date": "2024-12-05T08:29:52.593Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "Nvme9TgVcQLZQBQDGq44x3tAv7ULxZTSth3wKnpHorB",
-        "metadata": {
-            "title": "",
-            "content": "Open to date. Hit me up...",
-            "image_url": "https://w0.peakpx.com/wallpaper/256/100/HD-wallpaper-beautiful-girl-cute-pretty-sexy-girl.jpg",
-            "author": "Pauline",
-            "date": "2024-12-05T08:27:43.925Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "2nfmBr7dxUQyuYSrrpcZnoByBXe2gmGYLbZaCAgLtZgM",
-        "metadata": {
-            "title": "",
-            "content": "I am an adult movie star and I really want someone that would love me for me. I have been into a lot of relationships and people just keep judging me because of the nature of my job. I want a relationship that helps me grow.\n\n![Image Description](https://thumbs.dreamstime.com/b/pretty-sexy-cute-girl-woman-tight-dress-shows-off-legs-long-curly-blonde-hair-curls-urban-portraits-setting-143928000.jpg)",
-            "image_url": "",
-            "author": "CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP",
-            "date": "2024-12-05T08:26:16.800Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "EW12GRfpm4XZxZM47Te8ZafVVztiZywuTYDcKxuDmAtg",
-        "metadata": {
-            "title": "In search of Love.",
-            "content": "I am a bold proud African Lady. I want to connect with non-African men(Because I just love diversity and foreigners ).\n\n",
-            "image_url": "https://source.boomplaymusic.com/buzzgroup2/M00/38/09/rBEe_GKrLp6AQZ57AAIEdn_WNt8502.jpg",
-            "author": "EKo",
-            "date": "2024-12-05T08:22:49.035Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "Cjb2KsSbBivyef5aGaFkDGxnsFFVpXjxiZqd7S9eVJ1N",
-        "metadata": {
-            "title": "",
-            "content": "I love fashion and I need a man that can share the same dreams as I do...\n\n![Image Description](https://i.pinimg.com/736x/2c/9b/5a/2c9b5a9fded5276ee4312f884b15f42f.jpg)",
-            "image_url": "",
-            "author": "Helen",
-            "date": "2024-12-05T08:20:08.428Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "FEdrJv5oFfs6L7Pd9VTHVEhT78EKXs7nr6pcSRf96w9B",
-        "metadata": {
-            "title": "Looking for Love.",
-            "content": "I and my sister are so connected that we both have agreed to get in a relationship with a man. We just need a man that would treat us together as one and that would deeply love us.\n\n![Our Photo](https://thumbs.dreamstime.com/b/two-pretty-girl-friends-17593144.jpg)\n\nAbove is our photo.",
-            "image_url": "",
-            "author": "Joy and Mary",
-            "date": "2024-12-05T08:15:04.699Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "ED7izbxoAkhNKWnYKukmrmw7DuT5QbvCkY23vrGkFSMr",
-        "metadata": {
-            "title": "",
-            "content": "I am Andre Jane and I love men that are God fearing and are financially free. I am a CEO and I am looking out for men that would fit my energy and style. I am open to conversations:\n\n![Andre's Photo](https://i.pinimg.com/736x/6d/59/36/6d59367f06bd7350e087785cd5653c28.jpg)",
-            "image_url": "",
-            "author": "CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP",
-            "date": "2024-12-05T08:10:50.488Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    },
-    {
-        "pubkey": "C7sdVRG9PkRdi61yNLiLUY1QQWb3vXtjMRY6cWNH3zfa",
-        "metadata": {
-            "title": "",
-            "content": "All I want is true love and I am in search of true love. hit me up, I am willing to connect.",
-            "image_url": "",
-            "author": "CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP",
-            "date": "2024-12-05T07:49:48.526Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"CvPigo8NKEtYhAKGuwaYxtBv76F4a6kXYYfSPpwZK7pP\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
-        }
-    }
+  
 ]
 
 /* // Default posts to use if the server fetch fails or to append to the fetched data
@@ -582,7 +355,188 @@ function shuffleArray(array) {
     return array;
 }
 
+
 async function loadPosts() {
+    try {
+        // Fetch posts from the server
+        const response = await fetch(window.NODE_URL + `/api/metadata?network=${network}`);
+        const data = await response.json();
+
+        console.log("Fetched Data:", data);
+
+        // Randomly shuffle the default posts
+        const shuffledDefaultPosts = shuffleArray([...default_post]);
+
+        // Sort the combined data by date
+        const sortedData = sortPostsByDate(data);
+
+        // Combine fetched data with shuffled default posts
+        // const combinedData = [...data, ...shuffledDefaultPosts];
+        const FinalsortedData = [...sortedData, ...shuffledDefaultPosts];
+
+        // // Sort the combined data by date
+        // const sortedData = sortPostsByDate(combinedData);
+
+        // Render the posts
+        const postsContainer = document.getElementById("d_post_arena");
+        postsContainer.innerHTML = "";
+
+        FinalsortedData.forEach((entry) => {
+            const post = entry.metadata;
+            const postDiv = document.createElement("div");
+            postDiv.className = "post";
+
+            const trimmedAuthor = post.author.length > 15
+                ? `${post.author.slice(0, 12)}...`
+                : post.author;
+
+            const imageTag = post.image_url ? `<img src="${post.image_url}" alt="Post Image">` : "";
+            const titleDiv = post.title ? `<div class="title">${post.title}</div>` : "";
+
+            postDiv.innerHTML = `
+                ${imageTag}
+                <div class="post-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
+                    </svg>
+                    <span class="username" title="${post.author}">${trimmedAuthor}</span>
+                </div>
+                ${titleDiv}
+                <div class="content">${convertMarkdownToHtml(post.content)}</div>
+                <div class="date">${formatDate(post.date)}</div>
+                <div class="author" title="${post.author}>Posted by: ${trimmedAuthor}</div>
+                <br/>
+                
+                <div class="post-actions">
+                    <button class="like-button">
+                        👍
+                    </button>
+                    <button class="share-button">
+                        🔗
+                    </button>
+                    <button class="play-button">
+                        🎮
+                    </button>
+                </div>
+            `;
+
+            // Like Button Alert
+            postDiv.querySelector(".like-button").addEventListener("click", async (event) => {
+                event.stopPropagation();
+                await d_post_liker(entry);
+                alert(`You liked: "${post.title}"`);
+            });
+
+            // Share Button Alert
+            postDiv.querySelector(".share-button").addEventListener("click", async (event) => {
+                event.stopPropagation();
+                await d_post_sharer(entry);
+                alert(`You shared: "${post.title}"`);
+            });
+
+            // Play Button Alert
+            postDiv.querySelector(".play-button").addEventListener("click", async (event) => {
+                event.stopPropagation();
+                await d_main_play(entry);
+                // await d_post_sharer(entry);
+                // alert(`You shared: "${post.title}"`);
+            });
+
+            // Add an onclick event for the entire post
+            postDiv.addEventListener("click", (event) => {
+                if (event.target.closest("button")) return; // Ignore clicks on buttons
+                showPostPopup(post);
+            });
+
+            postsContainer.appendChild(postDiv);
+        });
+    } catch (error) {
+        console.error("Error loading posts - Loading from Defaults alone:", error);
+
+        // If fetching fails, use the shuffled default posts
+        const shuffledDefaultPosts = shuffleArray([...default_post]);
+        const sortedData = sortPostsByDate(shuffledDefaultPosts);
+
+        const postsContainer = document.getElementById("d_post_arena");
+        postsContainer.innerHTML = "";
+
+        sortedData.forEach((entry) => {
+            const post = entry.metadata;
+            const postDiv = document.createElement("div");
+            postDiv.className = "post";
+
+            const trimmedAuthor = post.author.length > 15
+                ? `${post.author.slice(0, 12)}...`
+                : post.author;
+
+            const imageTag = post.image_url ? `<img src="${post.image_url}" alt="Post Image">` : "";
+            const titleDiv = post.title ? `<div class="title">${post.title}</div>` : "";
+
+            postDiv.innerHTML = `
+                ${imageTag}
+                <div class="post-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
+                    </svg>
+                    <span class="username" title="${post.author}">${trimmedAuthor}</span>
+                </div>
+                ${titleDiv}
+                <div class="content">${convertMarkdownToHtml(post.content)}</div>
+                <div class="date">${formatDate(post.date)}</div>
+                <div class="author" title="${post.author}>Posted by: ${trimmedAuthor}</div>
+                <br/>
+                
+                <div class="post-actions">
+                    <button class="like-button">
+                        👍
+                        Like
+                    </button>
+                    <button class="share-button">
+                        🔗
+                        Share
+                    </button>
+                    <button class="play-button">
+                        🎮
+                    </button>
+                </div>
+            `;
+
+            // Like Button Alert
+            postDiv.querySelector(".like-button").addEventListener("click", async (event) => {
+                event.stopPropagation();
+                await d_post_liker(entry);
+                alert(`You liked: "${post.title}"`);
+            });
+
+            // Share Button Alert
+            postDiv.querySelector(".share-button").addEventListener("click", async (event) => {
+                event.stopPropagation();
+                await d_post_sharer(entry);
+                alert(`You shared: "${post.title}"`);
+            });
+
+            // Play Button Alert
+            postDiv.querySelector(".play-button").addEventListener("click", async (event) => {
+                event.stopPropagation();
+                await d_main_play(entry);
+                // await d_post_sharer(entry);
+                // alert(`You shared: "${post.title}"`);
+            });
+
+            // Add an onclick event for the entire post
+            postDiv.addEventListener("click", (event) => {
+                if (event.target.closest("button")) return; // Ignore clicks on buttons
+                showPostPopup(post);
+            });
+
+            postsContainer.appendChild(postDiv);
+        });
+    }
+}
+
+/* async function loadPosts() {
     try {
         // Fetch posts from the server
         const response = await fetch(window.NODE_URL + `/api/metadata?network=${network}`);
@@ -748,99 +702,7 @@ async function loadPosts() {
             postsContainer.appendChild(postDiv);
         });
     }
-}
-
-/* async function loadPosts() {
-    try {
-        // const response = await fetch( window.NODE_URL+"/api/metadata");
-        const response = await fetch( window.NODE_URL+"/api/metadata");
-        // https://api.quicknode.com/functions/rest/v1/functions/383e033e-937a-4338-8e7a-129e357baed5/call
-        const data = await response.json();
-
-        console.log("Fetched Data:", data);
-
-        const sortedData = sortPostsByDate(data);
-
-        const postsContainer = document.getElementById("d_post_arena");
-        postsContainer.innerHTML = "";
-
-        sortedData.forEach((entry) => {
-            const post = entry.metadata;
-            const postDiv = document.createElement("div");
-            postDiv.className = "post";
-
-            const trimmedAuthor = post.author.length > 15
-                ? `${post.author.slice(0, 12)}...`
-                : post.author;
-
-            // const trimmedPubkey = entry.pubkey.length > 15
-            //     ? `${entry.pubkey.slice(0, 12)}...`
-            //     : entry.pubkey;
-
-            const imageTag = post.image_url ? `<img src="${post.image_url}" alt="Post Image">` : "";
-            const titleDiv = post.title ? `<div class="title">${post.title}</div>` : "";
-
-            postDiv.innerHTML = `
-                ${imageTag}
-                <div class="post-header">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="7" r="4"></circle>
-                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
-                    </svg>
-                    <span class="username" title="${post.author}">${trimmedAuthor}</span>
-                </div>
-                ${titleDiv}
-                <div class="content">${convertMarkdownToHtml(post.content)}</div>
-                <div class="date">${formatDate(post.date)}</div>
-                <div class="author" title="${post.author}>Posted by: ${trimmedAuthor}</div>
-                <br/>
-                
-                <div class="post-actions">
-                    <button class="like-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
-                            <path d="M8.864.46c-.743-.794-1.97-.795-2.714-.003-.329.354-.597.906-.89 1.54-.29.632-.591 1.295-.806 1.977-.214.678-.432 1.519-.579 2.59-.146 1.053-.279 2.113-.34 2.978h4.448c.416 0 .768.275.855.68l.262 1.18c.117.523.323.799.543.9.227.106.462.113.774.113.303 0 .616-.002.927-.002.682 0 1.423.078 2.02.482.604.407.993 1.105.993 2.516 0 .87-.256 1.336-.638 1.52-.369.177-.874.255-1.304.255-.393 0-.897-.065-1.261-.264-.366-.199-.632-.513-.762-.857a1.5 1.5 0 0 1-.781 1.008c-.406.228-.91.306-1.349.306H9c-1.454 0-2.208-.895-2.438-1.745l-.766-3.532H1.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .5-.5H6c.015-.513.022-1.024.05-1.548.036-.619.093-1.252.175-1.885.165-1.263.402-2.507.682-3.368C7.1 1.393 7.345.99 7.598.773 7.861.548 8.142.45 8.864.46z"/>
-                        </svg>
-                        Like
-                    </button>
-                    <button class="share-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                            <path d="M13.5 1a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5h-7a1.5 1.5 0 0 1-1.5-1.5V5.707l-2.146 2.147a.5.5 0 0 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V9h5V2.5A1.5 1.5 0 0 1 13.5 1z"/>
-                        </svg>
-                        Share
-                    </button>
-                </div>
-            `;
-
-
-            // document.getElementById('postForm').addEventListener('submit', async (event) => {});
-
-            // Like Button Alert
-            postDiv.querySelector(".like-button").addEventListener("click", async (event) => {
-                event.stopPropagation();
-                await d_post_liker(entry);
-                alert(`You liked: "${post.title}"`);
-            });
-
-            // Share Button Alert
-            postDiv.querySelector(".share-button").addEventListener("click", async (event) => {
-                event.stopPropagation();
-                await d_post_sharer(entry);
-                alert(`You shared: "${post.title}"`);
-            });
-
-            // Add an onclick event for the entire post
-            postDiv.addEventListener("click", (event) => {
-                if (event.target.closest("button")) return; // Ignore clicks on buttons
-                showPostPopup(post);
-            });
-
-            postsContainer.appendChild(postDiv);
-        });
-    } catch (error) {
-        console.error("Error loading posts:", error);
-    }
 } */
-
 
 // Function to show post details in a popup
 function showPostPopup(post) {
@@ -1200,11 +1062,12 @@ createAccountBtn.addEventListener('click', openWalletModal);
 // Use an anonymous function to prevent immediate invocation
 
 
-document.getElementById('profile')?.addEventListener('click', () => userRedirect("profile.html"));
+// document.getElementById('profile')?.addEventListener('click', () => userRedirect("profile.html"));
 document.getElementById('transfer')?.addEventListener('click', () => userRedirect("send.html"));
 document.getElementById('home')?.addEventListener('click', () => userRedirect("index.html"));
 document.getElementById('message_item')?.addEventListener('click', () => userRedirect("messenger.html"));
-document.getElementById('games')?.addEventListener('click', () => userRedirect("games.html"));
+document.getElementById('build_item')?.addEventListener('click', () => userRedirect("game_dashboard.html"));
+// document.getElementById('games')?.addEventListener('click', () => userRedirect("games.html"));
 document.getElementById('about_us')?.addEventListener('click', () => userRedirect("white-paper.html") );
 
 
