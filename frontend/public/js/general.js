@@ -491,11 +491,9 @@ async function loadPosts() {
                 <div class="post-actions">
                     <button class="like-button">
                         👍
-                        Like
                     </button>
                     <button class="share-button">
                         🔗
-                        Share
                     </button>
                     <button class="play-button">
                         🎮

@@ -12,7 +12,7 @@
     <!-- <script src="js/marked.min.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     
-    <script src="js/game_dashboard.js?id=84938596892" defer></script>
+    <script src="js/game_dashboard.js?id=67456737582927585" defer></script>
 
     <style>
         body {
@@ -180,7 +180,7 @@
             cursor: pointer;
             font-size: 24px;
         }
-        .profile-popup {
+        /* .profile-popup {
             display: none;
             position: fixed;
             top: 60px;
@@ -192,7 +192,7 @@
         }
         .profile-popup.active {
             display: block;
-        }
+        } */
 
 
         /* Add all previous styles here */
@@ -291,7 +291,7 @@
         }
     
         /* Profile Popup Styling */
-        .profile-popup {
+        /* .profile-popup {
             position: fixed;
             top: 20px;
             right: 20px;
@@ -302,12 +302,11 @@
             border-radius: 12px;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
             font-family: 'Arial', sans-serif;
-            display: none; /* Hidden by default */
+            display: none; 
             animation: fadeIn 0.5s ease-in-out;
             transition: all 0.3s ease-in-out;
         }
     
-        /* Solana Logo */
         .solana-logo {
             display: flex;
             align-items: center;
@@ -318,6 +317,36 @@
         .solana-logo img {
             width: 50px;
             height: auto;
+        } */
+
+        .profile-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1E1E1E, #3A3A3A);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .solana-logo img {
+            width: 50px;
+            height: auto;
+            margin-bottom: 10px;
         }
     
         /* Wallet Text */
@@ -366,6 +395,8 @@
     </div> -->
     <!-- Wallet Pop-up UI -->
     <div class="profile-popup" id="profilePopup">
+        <span class="close-btn" onclick="closePopup()">✖</span>
+
         <div class="solana-logo">
             <img src="https://cryptologos.cc/logos/solana-sol-logo.png" alt="Solana Logo">
         </div>
@@ -375,6 +406,9 @@
 
     <div class="container">
         <div class="sidebar">
+
+            <span class="home" onclick="goToHome()">🏠 Home</span>
+
             <!-- Recent Projects Section -->
             <div class="recent-projects">
                 <h3 onclick="toggleSection('projects')">Recent Projects 📂 <span>▼</span></h3>
@@ -563,7 +597,7 @@
         }
 
         // Generate game based on prompt
-        function generateGame() {
+        /* function generateGame() {
             const prompt = document.getElementById("gamePrompt").value;
             const gameHTML = `<h2>${prompt}</h2><p>Sample game generated... 🎉</p>`;
             document.getElementById("gameOutput").innerHTML = gameHTML;
@@ -575,7 +609,7 @@
             }
             saveGameState(currentProject);
         }
-
+ */
         // Toggle between game and code view
         function toggleMode() {
             showCode = !showCode;
@@ -586,7 +620,23 @@
 
         // Launch game
         function launchGame() {
-            alert("Game launched successfully! 🎮");
+            alert("Game launched! 🎮 - Not allowed Yet.");
+        }
+
+        function closePopup() {
+            document.getElementById('profilePopup').style.display = 'none';
+        }
+
+        // Close when clicking outside the popup
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('profilePopup');
+            if (event.target !== popup && !popup.contains(event.target)) {
+                popup.style.display = 'none';
+            }
+        });
+
+        function goToHome() {
+            window.location.href = "index.html";
         }
 
         // On page load, load the most recent project
@@ -624,6 +674,10 @@
         return address;
     }
 
+    function goToHome() {
+        window.location.href = "index.html";
+    }
+
     // Save Solana address to LocalStorage
     function saveSolanaAddress() {
         if (!localStorage.getItem('solanaAddress')) {
@@ -642,6 +696,9 @@
     function toggleProfilePopup() {
         const popup = document.getElementById('profilePopup');
         popup.classList.toggle('active');
+
+        // profilePopup.style.display = 'block';
+        popup.style.display = (popup.style.display === "block") ? 'none' : "block";
     }
 
     // Extract HTML, CSS, and JavaScript from the AI response
@@ -657,77 +714,80 @@
         return { html, css, js };
     }
 
-    let URL__ = "http://localhost:3000";
+    let URL__ = window.NODE_URL;
 
-    // Send game prompt to the Node server
-    async function generateGame() {
-        const prompt = document.getElementById("gamePrompt").value;
-        const solanaAddress = localStorage.getItem('solanaAddress');
+    // // Send game prompt to the Node server
+    // async function generateGame() {
+    //     const prompt = document.getElementById("gamePrompt").value;
+    //     const solanaAddress = localStorage.getItem('solanaAddress');
 
-        if (!prompt) {
-            alert("Please enter a game prompt!");
-            return;
-        }
+    //     if (!prompt) {
+    //         alert("Please enter a game prompt!");
+    //         return;
+    //     }
 
-        // Show loading spinner and disable generate button
-        document.getElementById('generateButton').style.display = 'none';
-        document.getElementById('loadingSpinner').style.display = 'inline-block';
+    //     // Show loading spinner and disable generate button
+    //     document.getElementById('generateButton').style.display = 'none';
+    //     document.getElementById('loadingSpinner').style.display = 'inline-block';
 
-        try {
-            const response = await fetch(URL__+'/generate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ prompt, solanaAddress }),
-            });
+    //     try {
+    //         const response = await fetch(URL__+'/generate', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ prompt, solanaAddress }),
+    //         });
 
-            if (!response.ok) {
-                throw new Error('Failed to generate game content');
-            }
+    //         if (!response.ok) {
+    //             throw new Error('Failed to generate game content');
+    //         }
 
-            const data = await response.json();
-            const { html, css, js } = extractCodeBlocks(data.content);
+    //         const data = await response.json();
+    //         const { html, css, js } = extractCodeBlocks(data.content);
 
-            // Render HTML in iframe
-            const iframe = document.getElementById('gameOutput');
+    //         // Render HTML in iframe
+    //         const iframe = document.getElementById('gameOutput');
             
 
-            let fullHTML = html;
-            // If the HTML contains a </head> tag, insert the CSS and JS just before it.
-            // if (fullHTML.includes('</head>')) {
-            // } 
-            // else {
-            //     // If not, prepend them to the HTML.
-            // }
+    //         let fullHTML = html;
+    //         // If the HTML contains a </head> tag, insert the CSS and JS just before it.
+    //         // if (fullHTML.includes('</head>')) {
+    //         // } 
+    //         // else {
+    //         //     // If not, prepend them to the HTML.
+    //         // }
 
-            iframe.srcdoc = fullHTML;
+    //         iframe.srcdoc = fullHTML;
 
 
-            // Display HTML code in codeOutput
-            // document.getElementById('codeOutput').textContent = html;
-            document.getElementById('codeOutput').textContent = fullHTML;
+    //         // Display HTML code in codeOutput
+    //         // document.getElementById('codeOutput').textContent = html;
+    //         document.getElementById('codeOutput').textContent = fullHTML;
 
-            // Display other code blocks (CSS, JS) in otherCodeOutput
-            const otherCode = [];
-            if (css) otherCode.push(`/* CSS */\n${css}`);
-            if (js) otherCode.push(`/* JavaScript */\n${js}`);
-            document.getElementById('otherCodeOutput').textContent = otherCode.join('\n\n');
+    //         // Display other code blocks (CSS, JS) in otherCodeOutput
+    //         const otherCode = [];
+    //         if (css) otherCode.push(`/* CSS */\n${css}`);
+    //         if (js) otherCode.push(`/* JavaScript */\n${js}`);
+    //         document.getElementById('otherCodeOutput').textContent = otherCode.join('\n\n');
 
-            // Auto-save the game state
-            if (!currentProject) {
-                currentProject = generateProjectName();
-            }
-            saveGameState(currentProject);
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Failed to generate game content. Please try again.');
-        } finally {
-            // Hide loading spinner and show generate button
-            document.getElementById('loadingSpinner').style.display = 'none';
-            document.getElementById('generateButton').style.display = 'inline-block';
-        }
-    }
+    //         // Auto-save the game state
+    //         if (!currentProject) {
+    //             currentProject = generateProjectName();
+    //         }
+    //         saveGameState(currentProject);
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         alert('Failed to generate game content. Please try again.');
+    //     } finally {
+    //         // Hide loading spinner and show generate button
+    //         document.getElementById('loadingSpinner').style.display = 'none';
+    //         document.getElementById('generateButton').style.display = 'inline-block';
+    //     }
+    // }
+
+
+
 
     // On page load, initialize Solana address and load recent projects
     window.onload = () => {
@@ -812,6 +872,7 @@
                     body: JSON.stringify({
                         prompt,
                         solanaAddress,
+                        game_state: "",
                         emojis: Array.from(selectedItems.emojis),
                         platformers: Array.from(selectedItems.platformers),
                         effects: Array.from(selectedItems.effects),

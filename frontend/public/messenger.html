@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* General Reset */
-        * {
+        /* * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -30,9 +30,9 @@
             align-items: center;
             color: #333;
             overflow: auto;
-        }
+        } */
 
-        .container {
+        /* .container {
             display: flex;
             width: 100%;
             max-width: 1200px;
@@ -44,6 +44,114 @@
             flex-direction: row;
             justify-content: flex-start;
         }
+ */
+
+        /* Reset some styles for better cross-browser compatibility */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #00E7FF, #8A00FF, #FF007F);
+            height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content:flex-start;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+        }
+
+        /* Keyframe animation for smooth gradient transition */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Sidebar Styles */
+        .topbar {
+            position: sticky;
+            display: flex;
+            left: 0;
+            top: 0;
+            height: auto;
+            width: 100%;
+            background: #222;
+            padding-top: 20px;
+            z-index: 100;
+            transition: all 0.5s ease;
+            opacity: 0.75;
+        }
+
+        .topbar img{
+            width: 50px;
+            max-height: 50px;
+            border-radius: 15px;
+            /* display: inline-block; */
+        }
+        
+        .topbar a {
+            /* display: inline-block; */
+            padding: 15px;
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .topbar a:hover {
+            background: #444;
+        }
+
+        .general_post_arena{
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* Main Content Styles */
+        /* .main-content {
+            margin-left: 250px;
+            transition: margin-left 0.3s;
+            padding: 20px;
+            width: 50%;
+            flex: 1; 
+            overflow-y: auto;
+        } */
+
+        .main-content {
+
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat_section_div{
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 80%;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: auto;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
 
         /* Sidebar Styling */
         .sidebar {
@@ -310,45 +418,63 @@
 </head>
 <body>
     <div class="container">
-        <div class="menu-bar" id="d_menu_bar" onclick="toggleTopbar()">☰ Menu</div>
-        <div class="sidebar" id="d_sidebar">
-            <h2>Conversations</h2>
-            <div id="conversations-list">
-                <!-- Conversations will be dynamically inserted here -->
-            </div>
-        </div>
+        <div class="topbar">
+            <img src="src/somaker.webp" alt="somaker Logo">
+            <a href="#" id="home" class="profile">Play</a>
+            <a href="#" id="build_item" class="profile">Build</a>
+            <a href="#" id="message_item" class="profile">Messages</a>
+            <a href="#" id="about_us" class="about-us">SoMaker</a>
+            <!-- <a href="#" id="message_item" class="profile">Chats</a>
 
-        <div class="chat-area">
-            <h2>
-                Chat with <span id="active-chat-user">Select a user</span>
-                <a href="index.html" class="back-button">Back</a>
-            </h2>
-            <div class="the_option_chain">
-                <hr/>
-                <select class="the_selector_">
-                    <option>Offchain</option>
-                    <!-- <option>Onchain</option> -->
-                    <option disabled style="color: gray;">Onchain - Coming quicknode</option>
-                </select>
+            <a href="#" id="games" class="profile">Games</a>
+            <a href="#" id="transfer" class="transfer">Transfer</a>
+            <a href="#" id="about_us" class="about-us">About Us</a> -->
+        </div>
+    
+        <div class="main-content">  
+            <div class="chat_section_div">
+                <div class="menu-bar" id="d_menu_bar" onclick="toggleTopbar()">☰ Menu</div>
+                <div class="sidebar" id="d_sidebar">
+                    <h2>Conversations</h2>
+                    <div id="conversations-list">
+                        <!-- Conversations will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <div class="chat-area">
+                    <h2>
+                        Chat with <span id="active-chat-user">Select a user</span>
+                        <a href="index.html" class="back-button">Back</a>
+                    </h2>
+                    <div class="the_option_chain">
+                        <hr/>
+                        <select class="the_selector_">
+                            <option>Offchain</option>
+                            <!-- <option>Onchain</option> -->
+                            <option disabled style="color: gray;">Onchain - Coming quicknode</option>
+                        </select>
+                    </div>
+                    <div id="messages-display" class="messages-display">
+                        <!-- Messages will be dynamically inserted here -->
+                    </div>
+                    <div class="message-input">
+                        <textarea id="message-input" placeholder="Type a message..."></textarea>
+                        <label class="upload-button">
+                            <input type="file" id="media-input" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 0a12 12 0 100 24A12 12 0 0012 0zm6.93 7.64l-8.16 8.16L5.24 10.3 3.79 11.74l5.34 5.34 9.6-9.6-1.8-1.8z"/>
+                            </svg>
+                        </label>
+                        <!-- <button type="file" class="upload-button" id="media-input">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 0a12 12 0 100 24A12 12 0 0012 0zm6.93 7.64l-8.16 8.16L5.24 10.3 3.79 11.74l5.34 5.34 9.6-9.6-1.8-1.8z"/>
+                            </svg>
+                        </button> -->
+                        <button id="send-button">Send</button>
+                    </div>
+                </div>
             </div>
-            <div id="messages-display" class="messages-display">
-                <!-- Messages will be dynamically inserted here -->
-            </div>
-            <div class="message-input">
-                <textarea id="message-input" placeholder="Type a message..."></textarea>
-                <label class="upload-button">
-                    <input type="file" id="media-input" style="display: none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M12 0a12 12 0 100 24A12 12 0 0012 0zm6.93 7.64l-8.16 8.16L5.24 10.3 3.79 11.74l5.34 5.34 9.6-9.6-1.8-1.8z"/>
-                    </svg>
-                </label>
-                <!-- <button type="file" class="upload-button" id="media-input">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M12 0a12 12 0 100 24A12 12 0 0012 0zm6.93 7.64l-8.16 8.16L5.24 10.3 3.79 11.74l5.34 5.34 9.6-9.6-1.8-1.8z"/>
-                    </svg>
-                </button> -->
-                <button id="send-button">Send</button>
-            </div>
+            
         </div>
     </div>
 
@@ -434,6 +560,39 @@
     </script> -->
 
 <script src="js/messenger.js" ></script>
+<script>
+    // document.getElementById('profile')?.addEventListener('click', () => userRedirect("profile.html"));
+document.getElementById('transfer')?.addEventListener('click', () => userRedirect("send.html"));
+document.getElementById('home')?.addEventListener('click', () => userRedirect("index.html"));
+document.getElementById('message_item')?.addEventListener('click', () => userRedirect("messenger.html"));
+document.getElementById('build_item')?.addEventListener('click', () => userRedirect("game_dashboard.html"));
+// document.getElementById('games')?.addEventListener('click', () => userRedirect("games.html"));
+document.getElementById('about_us')?.addEventListener('click', () => userRedirect("white-paper.html") );
+
+async function userRedirect(pageUrl) {
+    redirectToPageWithData(pageUrl, null);
+    /* if (!keypair) {
+        // showToast('No wallet found. Create or load a wallet first.');
+        // return;
+        redirectToPageWithData(pageUrl, null);
+
+    }else{
+        redirectToPageWithData(pageUrl, keypair.publicKey);
+    } */
+}
+
+async function redirectToPageWithData(pageUrl, publicKey) {
+    if(publicKey == null){
+        const urlWithParams = `${pageUrl}`; // Add data to URL
+        window.location.href = urlWithParams; // Redirect to new URL
+    }else{
+        const urlWithParams = `${pageUrl}?public_key=${encodeURIComponent(publicKey)}`; // Add data to URL
+        window.location.href = urlWithParams; // Redirect to new URL
+    }
+    
+}
+
+</script>
 
 </body>
 </html>

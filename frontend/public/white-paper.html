@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoMaker White Paper & Business Proposal</title>
+    <style>
+        
+        /* Reset some styles for better cross-browser compatibility */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #00E7FF, #8A00FF, #FF007F);
+            height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content:flex-start;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+        }
+
+        /* Keyframe animation for smooth gradient transition */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Sidebar Styles */
+        .topbar {
+            position: sticky;
+            display: flex;
+            left: 0;
+            top: 0;
+            height: auto;
+            width: 100%;
+            background: #222;
+            padding-top: 20px;
+            z-index: 100;
+            transition: all 0.5s ease;
+            opacity: 0.75;
+        }
+
+        .topbar img{
+            width: 50px;
+            max-height: 50px;
+            border-radius: 15px;
+            /* display: inline-block; */
+        }
+        
+        .topbar a {
+            /* display: inline-block; */
+            padding: 15px;
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .topbar a:hover {
+            background: #444;
+        }
+
+        .general_post_arena{
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            transition: margin-left 0.3s;
+            padding: 20px;
+            width: 50%;
+            /* background: blueviolet; */
+            flex: 1; /* Takes up remaining space */
+            overflow-y: auto;
+            /* display: inline-block; */
+        }
+
+        /* Header styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .header .balance {
+            font-size: 18px;
+        }
+
+        .menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+    
+
+ 
+        .create-account {
+            padding: 10px 20px;
+            background: #00E7FF;
+            color: rgb(0, 0, 0);
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .container {
+            /* max-width: 900px; */
+            margin: auto;
+            /* background: white; */
+            /* padding: 20px; */
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <img src="src/somaker.webp" alt="somaker Logo">
+            <a href="#" id="home" class="profile">Play</a>
+            <a href="#" id="build_item" class="profile">Build</a>
+            <a href="#" id="message_item" class="profile">Messages</a>
+            <a href="#" id="about_us" class="about-us">SoMaker</a>
+            <!-- <a href="#" id="message_item" class="profile">Chats</a>
+
+            <a href="#" id="games" class="profile">Games</a>
+            <a href="#" id="transfer" class="transfer">Transfer</a>
+            <a href="#" id="about_us" class="about-us">About Us</a> -->
+        </div>
+    
+        <div class="main-content">  
+
+            <h1>SoMaker White Paper</h1>
+            <div class="section">
+                <h2>Introduction</h2>
+                <p>SoMaker is an innovative AI-powered game ecosystem that allows users to create, play, and compete in games effortlessly...</p>
+            </div>
+            <div class="section">
+                <h2>Vision</h2>
+                <p>To democratize game creation and foster a thriving gaming ecosystem...</p>
+            </div>
+            <div class="section">
+                <h2>Mission</h2>
+                <ul>
+                    <li>Empower users to create games through simple text prompts.</li>
+                    <li>Provide an engaging and competitive gaming environment.</li>
+                    <li>Reward top-performing players and creators with SoMaker tokens.</li>
+                    <li>Enable monetization opportunities via betting, campaigns, and in-game transactions.</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h2>Key Features</h2>
+                <ul>
+                    <li>AI-Powered Game Creation</li>
+                    <li>Game Ecosystem</li>
+                    <li>Tokenized Economy</li>
+                    <li>Decentralized Marketplace</li>
+                    <li>User Dashboard & Wallet</li>
+                </ul>
+            </div>
+            <h1>SoMaker Business Proposal</h1>
+            <div class="section">
+                <h2>Executive Summary</h2>
+                <p>SoMaker is an AI-driven game creation and gaming ecosystem...</p>
+            </div>
+            <div class="section">
+                <h2>Business Model</h2>
+                <ul>
+                    <li>Freemium Model</li>
+                    <li>Token Economy</li>
+                    <li>Platform Fees</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h2>Market Opportunity</h2>
+                <p>The global gaming market is projected to reach $300 billion by 2025...</p>
+            </div>
+            <div class="section">
+                <h2>Competitive Advantage</h2>
+                <ul>
+                    <li>AI-Powered Simplicity</li>
+                    <li>Tokenized Incentives</li>
+                    <li>Decentralized Marketplace</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h2>Financial Projections</h2>
+                <ul>
+                    <li>Year 1: Platform development, beta testing, and early adoption.</li>
+                    <li>Year 2: Monetization activation, strategic partnerships, and community growth.</li>
+                    <li>Year 3: Expansion into mainstream gaming and integration with major blockchain networks.</li>
+                </ul>
+            </div>
+            <div class="section">
+                <h2>Funding Requirements</h2>
+                <p>We seek funding of $79k to enhance AI game generation, expand the tokenized economy, and drive marketing.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    // document.getElementById('profile')?.addEventListener('click', () => userRedirect("profile.html"));
+document.getElementById('transfer')?.addEventListener('click', () => userRedirect("send.html"));
+document.getElementById('home')?.addEventListener('click', () => userRedirect("index.html"));
+document.getElementById('message_item')?.addEventListener('click', () => userRedirect("messenger.html"));
+document.getElementById('build_item')?.addEventListener('click', () => userRedirect("game_dashboard.html"));
+// document.getElementById('games')?.addEventListener('click', () => userRedirect("games.html"));
+document.getElementById('about_us')?.addEventListener('click', () => userRedirect("white-paper.html") );
+
+async function userRedirect(pageUrl) {
+    redirectToPageWithData(pageUrl, null);
+    /* if (!keypair) {
+        // showToast('No wallet found. Create or load a wallet first.');
+        // return;
+        redirectToPageWithData(pageUrl, null);
+
+    }else{
+        redirectToPageWithData(pageUrl, keypair.publicKey);
+    } */
+}
+
+async function redirectToPageWithData(pageUrl, publicKey) {
+    if(publicKey == null){
+        const urlWithParams = `${pageUrl}`; // Add data to URL
+        window.location.href = urlWithParams; // Redirect to new URL
+    }else{
+        const urlWithParams = `${pageUrl}?public_key=${encodeURIComponent(publicKey)}`; // Add data to URL
+        window.location.href = urlWithParams; // Redirect to new URL
+    }
+    
+}
+
+</script>
+</html>

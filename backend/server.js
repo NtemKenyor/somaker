@@ -139,7 +139,7 @@ app.get(MAIN_DIR+"/api/metadata", async (req, res) => {
 
 // Generate game content using DeepSeek API
 app.post('/generate', async (req, res) => {
-    const { prompt, solanaAddress, emojis, platformers, effects } = req.body;
+    const { prompt, solanaAddress, code_state, emojis, platformers, effects } = req.body;
 
     try {
         const response = await axios.post(
@@ -149,7 +149,8 @@ app.post('/generate', async (req, res) => {
                 messages: [
                     {
                         role: 'system',
-                        content: `You are a web Game developer. Return an HTML game with embedded CSS and JavaScript. Users should be able to click a floating start button to start playing the game. Use the following elements in the game:
+                        content: `You are a web Game developer. Return an HTML game with embedded CSS and JavaScript. Do not assume that the User is experience: so always return all the need lines of HTML code and make sure that you always improve the curent code state based on the users prompt. Users should be able to click a floating start button or event listener to scroll into view to start playing the game. Use the following elements in the game:
+                        - The current code state: ${code_state}
                         - Emojis: ${emojis.join(', ')}
                         - Platformers: ${platformers.join(', ')}
                         - Effects: ${effects.join(', ')}`,
