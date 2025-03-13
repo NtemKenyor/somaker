@@ -90,18 +90,18 @@ async function getAvailableRpcEndpoint(endpoints) {
 // Updated network setup function
 async function setupNetwork(network) {
     if (network === "main" || network === "mainnet") {
-        window.NODE_URL = "https://roynek.com/veilmatch/backend";
+        window.NODE_URL = "https://roynek.com/somaker/backend";
         window.PHP_URL = "https://roynek.com/cloudS/interact/server";
         // Use the first available Mainnet RPC endpoint
         const rpcUrl = await getAvailableRpcEndpoint(MAINNET_RPC_ENDPOINTS);
         window.connection = new solanaWeb3.Connection(rpcUrl, 'confirmed');
         console.log(`Connected to Mainnet RPC: ${rpcUrl}`);
     } else if (network === "dev" || network === "devnet") {
-        window.NODE_URL = "https://roynek.com/veilmatch/backend";
+        window.NODE_URL = "https://roynek.com/somaker/backend";
         window.PHP_URL = "https://roynek.com/cloudS/interact/server";
         window.connection = new solanaWeb3.Connection('https://spring-quick-surf.solana-devnet.quiknode.pro/016ff48f0f7c3f1520e515c01dca9a83ef528317', 'confirmed');
     } else if (network === "local" || network === "localnet") {
-        window.NODE_URL = "http://localhost:3000/veilmatch/backend";
+        window.NODE_URL = "http://localhost:3000/somaker/backend";
         window.PHP_URL = "http://localhost/cloudS/interact/server";
         window.connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
     } else {
@@ -117,8 +117,8 @@ var url = window.location.href;
 var network = getUrlParam(url, 'network');
 // console.log(network); // 'mainnet'
 
-// window.NODE_URL = "http://localhost:3000/veilmatch/backend";
-// window.NODE_URL = "https://roynek.com/veilmatch/backend";
+// window.NODE_URL = "http://localhost:3000/somaker/backend";
+// window.NODE_URL = "https://roynek.com/somaker/backend";
 // window.PHP_URL = "http://localhost";
 // window.PHP_URL = "https://roynek.com/cloudS/interact/server";
 
@@ -142,7 +142,7 @@ if(network != null){
         window.location.hostname === "0.0.0.0"
     ) {
         // Use localhost URLs
-        window.NODE_URL = "http://localhost:3000/veilmatch/backend";
+        window.NODE_URL = "http://localhost:3000/somaker/backend";
         window.PHP_URL = "http://localhost/cloudS/interact/server";
         window.connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
         // window.connection = 'http://127.0.0.1:8899';
