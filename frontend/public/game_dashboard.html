@@ -12,8 +12,7 @@
     <!-- <script src="js/marked.min.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     
-    <script src="js/game_dashboard.js?id=89457853758" defer></script>
-
+    
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -479,7 +478,7 @@
             <!-- Templates Section -->
             <h3 onclick="toggleSection('templates')">Templates 📄 <span>▼</span></h3>
             <div id="templates" class="content">
-                <div class="template-item" onclick="addTemplate('3-Way Race', '🏁', '<h1>3-Way Race</h1><p>Race against opponents in a thrilling 3-way competition!</p>')">
+                <!-- <div class="template-item" onclick="addTemplate('3-Way Race', '🏁', '<h1>3-Way Race</h1><p>Race against opponents in a thrilling 3-way competition!</p>')">
                     <div class="emoji">🏁</div>
                     <p>3-Way Race</p>
                 </div>
@@ -498,7 +497,7 @@
                 <div class="template-item" onclick="addTemplate('Fight Game', '🥊', '<h1>Fight Game</h1><p>Battle opponents and become the champion!</p>')">
                     <div class="emoji">🥊</div>
                     <p>Fight Game</p>
-                </div>
+                </div> -->
             </div>
 
             <!-- Launch Button -->
@@ -524,6 +523,7 @@
     <script>
         let showCode = false;
         let currentProject = null;
+        var product_unique_id = "75hfru%r47gjtu5jreno4";
 
         // Toggle sidebar sections
         function toggleSection(id) {
@@ -821,7 +821,7 @@
             }
 
             try {
-                const response = await fetch('/launch', {
+                const response = await fetch(window.NODE_URL+'/launch', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -850,7 +850,7 @@
                     });
                 } catch (error) {
                     console.error('Blockchain integration failed:', error);
-                    alert('Game launched and stored on the server, but blockchain integration failed. You can still share the link to play: ' + projectLink);
+                    alert('Game launched and stored on the server, but blockchain integration failed - Check console for details. You can still share the link to play: ' + projectLink);
                 }
 
                 // Open the game in a new tab
@@ -897,6 +897,7 @@ async function d_post_sharer(entry){
             pubkey: keypair.publicKey.toBase58(),
             ip: "", // TODO: we would get this...
             geo: ",", //TODO: We would get this and it would be the LAT,LONG
+            product_id: product_unique_id,
             others: ""
         })
     });
@@ -920,6 +921,7 @@ async function make_some_post({
         pubkey: keypair.publicKey.toBase58(),
         ip: "",
         geo: "LAT, LONG",
+        product_id: product_unique_id,
         others: ""
     },
     encryption_type = "" // New parameter
@@ -1421,5 +1423,9 @@ function ensurePopupHTML() {
             }
         };
     </script>
+
+<script src="js/game_dashboard.js?id=02847583759" defer></script>
+<script src="js/game_tempates.js?id=748568375737583" defer></script>
+
 </body>
 </html>

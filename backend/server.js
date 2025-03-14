@@ -94,6 +94,8 @@ const NETWORK_RPC_ENDPOINTS = {
         // 'https://spring-quick-surf.solana-devnet.quiknode.pro/016ff48f0f7c3f1520e515c01dca9a83ef528317', // Backup 1
         'https://api.devnet.solana.com', // Primary
     ],
+    development: ['https://api.devnet.solana.com',],
+    dev: ['https://api.devnet.solana.com',],
     localnet: [
         'http://127.0.0.1:8899', // Primary (local node)
     ],

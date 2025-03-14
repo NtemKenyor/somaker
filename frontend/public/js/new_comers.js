@@ -1,4 +1,4 @@
-    const uniqueContent = {
+/*     const uniqueContent = {
     slides: [
       {
         category: "What We Have Built",
@@ -68,7 +68,90 @@
     ],
   };
   
+ */
 
+  const uniqueContent = {
+    slides: [
+      {
+        category: "Our Accomplishments",
+        title: "AI-Powered Game Creation",
+        text: "With SoMaker, users can generate fully functional games in minutes using simple prompts. Our AI-driven engine transforms ideas into interactive experiences effortlessly.",
+        icon: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+            <rect x="4" y="4" width="16" height="16" rx="2" ry="2" stroke="var(--primary-blue)" stroke-width="2"/>
+            <path d="M8 8h8M8 12h6M8 16h4" stroke="var(--primary-blue)" stroke-width="2"/>
+          </svg>
+        `,
+      },
+      {
+        category: "Our Accomplishments",
+        title: "Game Marketplace",
+        text: "A dynamic game hub where users can explore, play, and compete in AI-generated games. The platform fosters an interactive community and encourages record-breaking achievements.",
+        icon: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="var(--primary-red)" stroke-width="2"/>
+            <path d="M8 12h8M12 8v8" stroke="var(--primary-red)" stroke-width="2"/>
+          </svg>
+        `,
+      },
+      {
+        category: "Our Accomplishments",
+        title: "Tokenized Rewards",
+        text: "Players who break records and engage actively in the ecosystem earn SoMaker tokens. This incentivizes skill, participation, and creativity.",
+        icon: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+            <polygon points="12,2 22,8 18,20 6,20 2,8" stroke="var(--primary-blue)" stroke-width="2" fill="none"/>
+            <circle cx="12" cy="12" r="3" stroke="var(--primary-blue)" stroke-width="2"/>
+          </svg>
+        `,
+      },
+      {
+        category: "Our Accomplishments",
+        title: "Integrated Wallet System",
+        text: "SoMaker includes a built-in wallet where users can store, deposit, withdraw, and transfer their earnings securely across blockchain networks.",
+        icon: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+            <path d="M3 11h18v2H3z" fill="var(--primary-blue)"/>
+            <circle cx="12" cy="12" r="5" stroke="var(--primary-blue)" stroke-width="2"/>
+          </svg>
+        `,
+      },
+      {
+        category: "The Future of SoMaker",
+        title: "Cross-Platform Support",
+        text: "We are expanding SoMaker's compatibility, enabling users to create and play games across mobile, web, and VR platforms seamlessly.",
+        icon: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="3" ry="3" stroke="var(--primary-red)" stroke-width="2"/>
+            <path d="M9 12h6" stroke="var(--primary-red)" stroke-width="2"/>
+          </svg>
+        `,
+      },
+      {
+        category: "The Future of SoMaker",
+        title: "Decentralized Betting",
+        text: "We are introducing optional decentralized betting features, allowing users to wager tokens on game outcomes while maintaining transparency and fairness.",
+        icon: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="var(--primary-blue)" stroke-width="2"/>
+            <path d="M9 15l3-3 3 3" stroke="var(--primary-blue)" stroke-width="2"/>
+          </svg>
+        `,
+      },
+      {
+        category: "The Future of SoMaker",
+        title: "AI-Generated Storylines",
+        text: "SoMaker will revolutionize game development by allowing users to create entire story-driven games using AI-generated narratives, characters, and dialogues.",
+        icon: `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+            <path d="M4 4h16v16H4z" stroke="var(--primary-red)" stroke-width="2"/>
+            <path d="M8 8h8M8 12h6M8 16h4" stroke="var(--primary-red)" stroke-width="2"/>
+          </svg>
+        `,
+      },
+    ],
+  };
+  
    
     function uniqueUpdateSlide() {
         const slide = uniqueContent.slides[uniqueCurrentSlide];

@@ -1,12 +1,14 @@
     /* Root variables for colors */
     :root {
-      --primary-red: #d32f2f;
-      --primary-blue: #1976d2;
+      --primary-red: #00E7FF;
+      --primary-blue: #8A00FF;
       --background-dark: #121212;
       --white: #ffffff;
-      --cool-corner-radius: 15px;
-      --button-radius: 8px;
+      --cool-corner-radius: 20px;
+      --button-radius: 13px;
     }
+
+    /* #00E7FF, #8A00FF */
 
     /* Unique slide container */
     .unique-slide-container {

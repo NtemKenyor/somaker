@@ -248,7 +248,8 @@ async function BuildNetwork(network) {
     } else if (network === "dev" || network === "devnet") {
         window.NODE_URL = "https://roynek.com/somaker/backend";
         window.PHP_URL = "https://roynek.com/cloudS/interact/server";
-       return new solanaWeb3.Connection('https://spring-quick-surf.solana-devnet.quiknode.pro/016ff48f0f7c3f1520e515c01dca9a83ef528317', 'confirmed');
+        // return new solanaWeb3.Connection('https://spring-quick-surf.solana-devnet.quiknode.pro/016ff48f0f7c3f1520e515c01dca9a83ef528317', 'confirmed');
+       return new solanaWeb3.Connection('https://api.testnet.sonic.game/', 'confirmed');
     } else if (network === "local" || network === "localnet") {
         window.NODE_URL = "http://localhost:3000/somaker/backend";
         window.PHP_URL = "http://localhost/cloudS/interact/server";
@@ -315,6 +316,7 @@ async function setupNetwork(network="mainnet"){
     console.log("Current Blockchain Network:", window.connection);
 }
 
+let default_product_id = "75hfru%r47gjtu5jreno4";
 const default_post = [
     {
         "pubkey": "5vDfnGGr6VzDCM2hAtCx3h1G113FC5SFm5hMs88Nf7yR",
@@ -324,9 +326,24 @@ const default_post = [
             "image_url": "",
             "author": "Game Republic",
             "date": "2024-12-22T20:06:54.116Z",
-            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"BSsCnFimdYBKhrt4gvaCePxiXcooVZvexs39yEzwoMp1\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"others\":\"\"}"
+            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"BSsCnFimdYBKhrt4gvaCePxiXcooVZvexs39yEzwoMp1\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"product_id\":\"75hfru%r47gjtu5jreno4\",\"others\":\"\"}"
         }
     },
+
+
+    {
+        "pubkey": "5vDfnGGr6VzDCM2hAtCx3h1G113FC5SFm5hMs88Nf7yR",
+        "metadata": {
+            "title": "Space Drive: Play Now.",
+            "content": "Explore the deep corners of space. Highes score is 500, Break this record to receive $100: Play Now:\n\n{{element|type=iframe|src=https://roynek.com/cloudS/interact/public/space_explorer/}}",
+            "image_url": "",
+            "author": "Game Republic",
+            "date": "2024-12-22T20:06:54.116Z",
+            "others": "{\"nft\":\"false\",\"nude\":\"false\",\"encryption\":\"\",\"share\":\"false\",\"comment\":\"false\",\"main_post_id\":\"\",\"category\":\"entertainment\",\"hash\":\"\",\"pubkey\":\"BSsCnFimdYBKhrt4gvaCePxiXcooVZvexs39yEzwoMp1\",\"ip\":\"\",\"geo\":\"LAT, LONG\",\"product_id\":\"75hfru%r47gjtu5jreno4\",\"others\":\"\"}"
+        }
+    },
+
+    
   
 ]
 
@@ -382,74 +399,81 @@ async function loadPosts() {
         postsContainer.innerHTML = "";
 
         FinalsortedData.forEach((entry) => {
-            const post = entry.metadata;
-            const postDiv = document.createElement("div");
-            postDiv.className = "post";
+            const othersObj = JSON.parse(entry.metadata.others);
+            console.log("from json: "+ othersObj.product_id );
+            console.log("from variable: "+ default_product_id);
+            if(othersObj.product_id === default_product_id){
+                const post = entry.metadata;
+                const postDiv = document.createElement("div");
+                postDiv.className = "post";
 
-            const trimmedAuthor = post.author.length > 15
-                ? `${post.author.slice(0, 12)}...`
-                : post.author;
+                const trimmedAuthor = post.author.length > 15
+                    ? `${post.author.slice(0, 12)}...`
+                    : post.author;
 
-            const imageTag = post.image_url ? `<img src="${post.image_url}" alt="Post Image">` : "";
-            const titleDiv = post.title ? `<div class="title">${post.title}</div>` : "";
+                const imageTag = post.image_url ? `<img src="${post.image_url}" alt="Post Image">` : "";
+                const titleDiv = post.title ? `<div class="title">${post.title}</div>` : "";
 
-            postDiv.innerHTML = `
-                ${imageTag}
-                <div class="post-header">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="7" r="4"></circle>
-                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
-                    </svg>
-                    <span class="username" title="${post.author}">${trimmedAuthor}</span>
-                </div>
-                ${titleDiv}
-                <div class="content">${convertMarkdownToHtml(post.content)}</div>
-                <div class="date">${formatDate(post.date)}</div>
-                <div class="author" title="${post.author}>Posted by: ${trimmedAuthor}</div>
-                <br/>
+                postDiv.innerHTML = `
+                    ${imageTag}
+                    <div class="post-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="7" r="4"></circle>
+                            <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
+                        </svg>
+                        <span class="username" title="${post.author}">${trimmedAuthor}</span>
+                    </div>
+                    ${titleDiv}
+                    <div class="content">${convertMarkdownToHtml(post.content)}</div>
+                    <div class="date">${formatDate(post.date)}</div>
+                    <div class="author" title="${post.author}>Posted by: ${trimmedAuthor}</div>
+                    <br/>
+                    
+                    <div class="post-actions">
+                        <button class="like-button">
+                            👍
+                        </button>
+                        <button class="share-button">
+                            🔗
+                        </button>
+                        <button class="play-button">
+                            🎮
+                        </button>
+                    </div>
+                `;
+
+                // Like Button Alert
+                postDiv.querySelector(".like-button").addEventListener("click", async (event) => {
+                    event.stopPropagation();
+                    await d_post_liker(entry);
+                    alert(`You liked: "${post.title}"`);
+                });
+
+                // Share Button Alert
+                postDiv.querySelector(".share-button").addEventListener("click", async (event) => {
+                    event.stopPropagation();
+                    await d_post_sharer(entry);
+                    alert(`You shared: "${post.title}"`);
+                });
+
+                // Play Button Alert
+                postDiv.querySelector(".play-button").addEventListener("click", async (event) => {
+                    event.stopPropagation();
+                    await d_main_play(entry);
+                    // await d_post_sharer(entry);
+                    // alert(`You shared: "${post.title}"`);
+                });
+
+                // Add an onclick event for the entire post
+                postDiv.addEventListener("click", (event) => {
+                    if (event.target.closest("button")) return; // Ignore clicks on buttons
+                    showPostPopup(post);
+                });
+
+                postsContainer.appendChild(postDiv);
+            }
                 
-                <div class="post-actions">
-                    <button class="like-button">
-                        👍
-                    </button>
-                    <button class="share-button">
-                        🔗
-                    </button>
-                    <button class="play-button">
-                        🎮
-                    </button>
-                </div>
-            `;
-
-            // Like Button Alert
-            postDiv.querySelector(".like-button").addEventListener("click", async (event) => {
-                event.stopPropagation();
-                await d_post_liker(entry);
-                alert(`You liked: "${post.title}"`);
-            });
-
-            // Share Button Alert
-            postDiv.querySelector(".share-button").addEventListener("click", async (event) => {
-                event.stopPropagation();
-                await d_post_sharer(entry);
-                alert(`You shared: "${post.title}"`);
-            });
-
-            // Play Button Alert
-            postDiv.querySelector(".play-button").addEventListener("click", async (event) => {
-                event.stopPropagation();
-                await d_main_play(entry);
-                // await d_post_sharer(entry);
-                // alert(`You shared: "${post.title}"`);
-            });
-
-            // Add an onclick event for the entire post
-            postDiv.addEventListener("click", (event) => {
-                if (event.target.closest("button")) return; // Ignore clicks on buttons
-                showPostPopup(post);
-            });
-
-            postsContainer.appendChild(postDiv);
+            
         });
     } catch (error) {
         console.error("Error loading posts - Loading from Defaults alone:", error);
@@ -850,7 +874,7 @@ async function getBalance() {
     console.log("The Wallet balance: " + balance);
 
     // document.getElementById('balance').textContent = 'Balance: ' + (balance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(2) + ' SOL';
-    document.getElementById('balance').textContent = 'Balance: ' + (Math.floor((balance / solanaWeb3.LAMPORTS_PER_SOL) * 100) / 100) + ' SOL';
+    document.getElementById('balance').textContent = '💰: ' + (Math.floor((balance / solanaWeb3.LAMPORTS_PER_SOL) * 100) / 100) + ' SOL';
 
     // little_profile();
 }
