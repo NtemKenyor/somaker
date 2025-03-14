@@ -6,7 +6,9 @@ const { Connection, PublicKey, Keypair } = require("@solana/web3.js");
 const { fetchMetadataForAccounts } = require("./fetchMetadata");
 const { createPost } = require("./createPost");
 const forge = require("node-forge");
-
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = 3000;
