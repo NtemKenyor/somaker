@@ -86,6 +86,28 @@ async function BuildNetwork(network) {
 }
 
 
+// Display public key and balance
+async function displayWalletInfo() {
+    // document.getElementById('publicKey').textContent = keypair.publicKey.toBase58();
+    await getBalance();
+}
+
+/* async function getBalance() {
+    if (!keypair) {
+        alert('No wallet found. Create or load a wallet first.');
+        return;
+    }
+    // const balance = await window.connection.getBalance(keypair.publicKey);
+    const balance = await window.connection.getBalance(keypair.publicKey);
+    console.log("The Wallet balance: " + balance);
+
+    // document.getElementById('balance').textContent = 'Balance: ' + (balance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(2) + ' SOL';
+    document.getElementById('balance').textContent = 'Balance: ' + (Math.floor((balance / solanaWeb3.LAMPORTS_PER_SOL) * 100) / 100) + ' SOL';
+
+    // little_profile();
+}
+ */
+
 async function loadStoredWallet() {
     const privateKey = localStorage.getItem('solana_private_key');
     // const accountIcon = document.getElementById('accountIcon');
