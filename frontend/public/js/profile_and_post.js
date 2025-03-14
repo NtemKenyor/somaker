@@ -504,8 +504,13 @@ document.querySelector('.copy-btn').addEventListener('click', () => {
 
 
 
+// document.getElementById('createPostBtn').addEventListener('click', () => {
+//     document.getElementById('postPopup').style.display = 'block';
+// });
+
 document.getElementById('createPostBtn').addEventListener('click', () => {
-    document.getElementById('postPopup').style.display = 'block';
+    // document.getElementById('postPopup').style.display = 'block';
+    userRedirect("game_dashboard.html");
 });
 
 document.getElementById('closePopup').addEventListener('click', () => {

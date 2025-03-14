@@ -12,7 +12,7 @@
     <!-- <script src="js/marked.min.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     
-    <script src="js/game_dashboard.js?id=67456737582927585" defer></script>
+    <!-- <script src="js/game_dashboard.js?id=8453957975937359" defer></script> -->
 
     <style>
         body {
@@ -60,6 +60,9 @@
         .sidebar .content {
             display: none;
             margin-top: 10px;
+        }
+        .sidebar .content li{
+            cursor: pointer;
         }
         .sidebar .content.active {
             display: block;
@@ -409,6 +412,20 @@
 
             <span class="home" onclick="goToHome()">🏠 Home</span>
 
+            <!-- File Section -->
+            <h3 onclick="toggleSection('file')">File 📁 <span>▼</span></h3>
+            <div id="file" class="content">
+                <ul>
+                    <li onclick="newProject()">🆕 New Project</li>
+                    <li onclick="saveProject()">💾 Save</li>
+                    <li onclick="saveProjectAs()">💾 Save As...</li>
+                    <li onclick="exportProject()">📤 Export</li>
+                    <li onclick="importProject()">📥 Import</li>
+                    <li onclick="undo()">↩️ Undo</li>
+                    <li onclick="redo()">↪️ Redo</li>
+                </ul>
+            </div>
+
             <!-- Recent Projects Section -->
             <div class="recent-projects">
                 <h3 onclick="toggleSection('projects')">Recent Projects 📂 <span>▼</span></h3>
@@ -516,8 +533,8 @@
 
         // Save game state to LocalStorage
         function saveGameState(projectName) {
-            const gameOutput = document.getElementById('gameOutput').innerHTML;
-            const codeOutput = document.getElementById('codeOutput').textContent;
+            const gameOutput = document.getElementById('gameOutput').srcdoc;
+            const codeOutput = document.getElementById('codeTextarea').value;
 
             const project = {
                 name: projectName,
@@ -533,12 +550,182 @@
             updateRecentProjects();
         }
 
+
+        // Toggle sidebar sections
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            section.classList.toggle('active');
+        }
+
+        // Create a new project
+        function newProject() {
+            currentProject = null;
+            document.getElementById('gameOutput').srcdoc = '';
+            document.getElementById('codeTextarea').value = '';
+            alert('New project created!');
+        }
+
+        // Save the current project
+        function saveProject() {
+            if (!currentProject) {
+                saveProjectAs();
+                return;
+            }
+
+            const gameOutput = document.getElementById('gameOutput').srcdoc;
+            const codeOutput = document.getElementById('codeTextarea').value;
+
+            const project = {
+                name: currentProject,
+                gameOutput,
+                codeOutput,
+                timestamp: new Date().toISOString(),
+            };
+
+            localStorage.setItem(currentProject, JSON.stringify(project));
+            alert('Project saved successfully!');
+            updateRecentProjects();
+        }
+
+        // Save the current project with a new name
+        function saveProjectAs() {
+            const projectName = prompt('Enter a name for your project:');
+            if (!projectName) return;
+
+            currentProject = `project_${projectName}`;
+            saveProject();
+        }
+
+        // Export the current project as a file
+        function exportProject() {
+            const gameOutput = document.getElementById('gameOutput').srcdoc;
+            const blob = new Blob([gameOutput], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = currentProject ? `${currentProject}.html` : 'project.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Import a project from a file
+        function importProject() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.html';
+
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    const content = event.target.result;
+                    document.getElementById('gameOutput').srcdoc = content;
+                    document.getElementById('codeTextarea').value = content;
+                    alert('Project imported successfully!');
+                };
+
+                reader.readAsText(file);
+            };
+
+            input.click();
+        }
+
+
+        // Undo and Redo stacks
+        let undoStack = [];
+        let redoStack = [];
+
+        // Maximum number of undo/redo steps to store
+        const MAX_STACK_SIZE = 30;
+
+        // Save the current state to the undo stack
+        function saveState() {
+            const gameOutput = document.getElementById('gameOutput').srcdoc;
+            const codeOutput = document.getElementById('codeTextarea').value;
+
+            // Add the current state to the undo stack
+            undoStack.push({ gameOutput, codeOutput });
+
+            // Limit the stack size
+            if (undoStack.length > MAX_STACK_SIZE) {
+                undoStack.shift(); // Remove the oldest state
+            }
+
+            // Clear the redo stack when a new state is saved
+            redoStack = [];
+        }
+
+        // Undo the last action
+        function undo() {
+            if (undoStack.length === 0) {
+                alert('Nothing to undo!');
+                return;
+            }
+
+            // Get the last state from the undo stack
+            const lastState = undoStack.pop();
+
+            // Save the current state to the redo stack
+            const currentState = {
+                gameOutput: document.getElementById('gameOutput').srcdoc,
+                codeOutput: document.getElementById('codeTextarea').value,
+            };
+            redoStack.push(currentState);
+
+            // Apply the last state
+            document.getElementById('gameOutput').srcdoc = lastState.gameOutput;
+            document.getElementById('codeTextarea').value = lastState.codeOutput;
+        }
+
+        // Redo the last undone action
+        function redo() {
+            if (redoStack.length === 0) {
+                alert('Nothing to redo!');
+                return;
+            }
+
+            // Get the last state from the redo stack
+            const lastState = redoStack.pop();
+
+            // Save the current state to the undo stack
+            const currentState = {
+                gameOutput: document.getElementById('gameOutput').srcdoc,
+                codeOutput: document.getElementById('codeTextarea').value,
+            };
+            undoStack.push(currentState);
+
+            // Apply the last state
+            document.getElementById('gameOutput').srcdoc = lastState.gameOutput;
+            document.getElementById('codeTextarea').value = lastState.codeOutput;
+        }
+
+        // Call saveState() whenever the gameOutput or codeTextarea changes
+        document.getElementById('codeTextarea').addEventListener('input', () => {
+            saveState();
+        });
+
+        // Call saveState() when the gameOutput is updated (e.g., after generating a game)
+        function updateGameOutput(content) {
+            document.getElementById('gameOutput').srcdoc = content;
+            saveState();
+        }
+
+
         // Load game state from LocalStorage
         function loadGameState(projectName) {
             const project = JSON.parse(localStorage.getItem(projectName));
             if (project) {
-                document.getElementById('gameOutput').innerHTML = project.gameOutput;
-                document.getElementById('codeOutput').textContent = project.codeOutput;
+                document.getElementById('gameOutput').srcdoc = project.gameOutput;
+                document.getElementById('codeTextarea').value = project.codeOutput;
+
+                /* const codeTextarea = document.getElementById('codeTextarea');
+                const gameOutput = document.getElementById('gameOutput');
+
+                codeTextarea.addEventListener('input', () => {
+                    gameOutput.srcdoc = codeTextarea.value;
+                }); */
                 currentProject = projectName;
             }
         }
@@ -581,13 +768,14 @@
         // Add template to gameOutput and codeOutput
         function addTemplate(title, emoji, htmlContent) {
             const gameOutput = document.getElementById('gameOutput');
-            const codeOutput = document.getElementById('codeOutput');
+            // const codeOutput = document.getElementById('codeOutput');
+            const codeOutput = document.getElementById('codeTextarea');
 
             // Add HTML to gameOutput
-            gameOutput.innerHTML = htmlContent;
+            gameOutput.srcdoc = htmlContent;
 
             // Add HTML code to codeOutput
-            codeOutput.textContent = htmlContent;
+            codeOutput.value = htmlContent;
 
             // Auto-save the game state
             if (!currentProject) {
@@ -623,6 +811,56 @@
             alert("Game launched! 🎮 - Not allowed Yet.");
         }
 
+        // Launch game
+        async function launchGame() {
+            const code = document.getElementById('codeTextarea').value;
+
+            if (!code) {
+                alert('Please generate or write some code before launching!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/launch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to launch game');
+                }
+
+                const data = await response.json();
+                const projectLink = data.link;
+
+                // Display the link to the user
+                alert(`Game launched successfully! 🎮\nShare this link to play: ${projectLink}`);
+
+                // Call the blockchain function to share the game
+                try {
+                    await d_post_sharer({
+                        metadata: {
+                            title: 'New Game Launched',
+                            content: `Check out my new game:\n\n{{element|type=iframe|src=${projectLink}}}`,
+                            author: 'Game Creator',
+                        },
+                    });
+                } catch (error) {
+                    console.error('Blockchain integration failed:', error);
+                    alert('Game launched and stored on the server, but blockchain integration failed. You can still share the link to play: ' + projectLink);
+                }
+
+                // Open the game in a new tab
+                window.open(projectLink, '_blank');
+            } catch (error) {
+                console.error('Error launching game:', error);
+                alert('Failed to launch game. Please try again.');
+            }
+        }
+
         function closePopup() {
             document.getElementById('profilePopup').style.display = 'none';
         }
@@ -639,9 +877,256 @@
             window.location.href = "index.html";
         }
 
+        
+async function d_post_sharer(entry){
+    post = entry.metadata;
+
+    await make_some_post({
+        title: post.title,
+        content: post.content,
+        author: post.author,
+        others: JSON.stringify({
+            nft: "false",
+            nude: "false",
+            encryption: "", // encryption: "AES256",
+            share: "true",
+            comment: "false",
+            main_post_id: "", 
+            category: "entertainment", // "technology",
+            hash: "",
+            pubkey: keypair.publicKey.toBase58(),
+            ip: "", // TODO: we would get this...
+            geo: ",", //TODO: We would get this and it would be the LAT,LONG
+            others: ""
+        })
+    });
+}
+
+
+async function make_some_post({
+    title = document.getElementById("title").value,
+    content = document.getElementById("content").value,
+    image_url = document.getElementById("image_url").value,
+    author = document.getElementById("author").value || keypair.publicKey.toBase58(),
+    others = {
+        nft: "false",
+        nude: "false",
+        encryption: "",
+        share: "false",
+        comment: "false",
+        main_post_id: "", 
+        category: "entertainment",
+        hash: "",
+        pubkey: keypair.publicKey.toBase58(),
+        ip: "",
+        geo: "LAT, LONG",
+        others: ""
+    },
+    encryption_type = "" // New parameter
+} = {}) {
+    try {
+        // Encrypt private key
+        const encryptedPrivateKey = await encryptPrivateKey(serverPublicKeyPem, JSON.stringify(Array.from(keypair.secretKey)));
+
+        // Construct postData
+        const postData = {
+            encryptedPrivateKey: encryptedPrivateKey,
+            publicKey: serverPublicKeyPem,
+            title: title,
+            content: content,
+            image_url: image_url,
+            author: author,
+            date: new Date().toISOString(),
+            network_pref: network, // the network preference or network used on the frontend...
+            others: typeof others != "string" ? JSON.stringify(others) : others, // Ensure "others" is a JSON structure
+            // encryption_type: encryption_type // Include encryption_type in the payload
+        };
+
+        console.log("Post Data:", postData);
+
+        // Send data to server
+        const response = await fetch(NODE_URL+"/api/create-post", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postData)
+        });
+
+        // Handle response
+        const result = await response.json();
+
+        // Determine which pop-up to show based on the response
+        if (result.error) {
+            showPopup("error", "Error", `Error: ${result.error}. Details: ${result.details || "No additional details provided."}`);
+            alert("Raw Output: " + JSON.stringify(result));
+        } else if (result.edit_key && result.message && result.signature) {
+            showPopup("success", "Success", "Your post has been successfully created!", result);
+        } else {
+            showPopup("warning", "Warning", "Unexpected response from the server.");
+            alert("Raw Output: " + JSON.stringify(result));
+        }
+        // alert("Raw Output: "+JSON.stringify(result));
+
+    } catch (error) {
+        console.error("Error submitting post:", error);
+        alert("Failed to submit post.");
+    }
+}
+
+
+
+async function encryptPrivateKey(publicKeyPem, privateKey) {
+    // Convert the server's public key from PEM format to a Forge public key object
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+    
+    // Split the private key string into chunks of 10 characters
+    const privateKeyChunks = privateKey.match(/.{1,10}/g); // This splits the string into chunks of 10 characters
+
+    // Encrypt each chunk using RSA-OAEP
+    const encryptedChunks = await Promise.all(privateKeyChunks.map(async (chunk) => {
+        try {
+            return publicKey.encrypt(chunk, 'RSA-OAEP');
+        } catch (error) {
+            console.error("Error encrypting chunk:", error);
+            throw error;
+        }
+    }));
+
+    // Return a JSON string containing both the chunks and the encrypted chunks
+    const result = {
+        // originalChunks: privateKeyChunks,
+        encryptedChunks: encryptedChunks
+    };
+
+    return JSON.stringify(result);
+}
+
+
+// Function to show a pop-up
+function showPopup(type, title, message, extra_data=null, stay_time=5000) {
+    ensurePopupHTML();
+
+    const popup = document.createElement("div");
+    popup.className = `popup ${type}`;
+    popup.innerHTML = `
+        <div class="popup-icon">${getSVGIcon(type)}</div>
+        <div class="popup-content">
+            <strong>${title}</strong>
+            <p>${message}</p>
+        </div>
+        <button class="popup-close" aria-label="Close">&times;</button>
+    `;
+    
+    // Add the popup to the container
+    const container = document.getElementById("popup-container");
+    container.appendChild(popup);
+
+    // Add event listener for close button
+    const closeButton = popup.querySelector(".popup-close");
+    closeButton.addEventListener("click", () => popup.remove());
+
+    // Automatically remove pop-up after 5 seconds if not manually closed
+    setTimeout(() => {
+        if (popup.parentElement) popup.remove();
+
+        if(type="success" && extra_data != null){
+            // Ask the user if they want to download the editing keys
+            const userWantsToDownload = confirm(
+                "Your post editing keys are ready. Would you like to download them now?"
+            );
+            // Downloading the edit keys and reloading the page...
+            if (userWantsToDownload) {
+                downloadDJSON(extra_data);
+                // Reload the page with `page_shuffle=false`
+                shufflePageReload("false");
+            }
+        }
+        
+    }, stay_time);
+}
+
+
+// Function to inject pop-up HTML and styles if not already on the page
+function ensurePopupHTML() {
+    if (!document.getElementById("popup-container")) {
+        const container = document.createElement("div");
+        container.id = "popup-container";
+        container.style.position = "fixed";
+        container.style.top = "10px";
+        container.style.right = "10px";
+        container.style.width = "320px";
+        container.style.zIndex = "9999";
+        document.body.appendChild(container);
+
+        // Inject styles directly into the page
+        const style = document.createElement("style");
+        style.textContent = `
+            #popup-container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .popup {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+                color: #000;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                border-left: 5px solid;
+                animation: fadeIn 0.3s ease-in-out;
+                position: relative;
+            }
+            .popup.success { border-color: #28a745; }
+            .popup.warning { border-color: #ffc107; }
+            .popup.error { border-color: #dc3545; }
+            .popup-icon {
+                flex-shrink: 0;
+                margin-right: 15px;
+            }
+            .popup-content {
+                flex: 1;
+            }
+            .popup-content strong {
+                display: block;
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+            .popup-content p {
+                font-size: 0.875rem;
+                margin: 0;
+            }
+            .popup-close {
+                background: none;
+                border: none;
+                broder: 2px dotted #00A;
+                font-size: 1.2rem;
+                color: #333;
+                cursor: pointer;
+                margin-left: 10px;
+                transition: color 0.2s;
+            }
+            .popup-close:hover {
+                color: #000;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+
+
+
         // On page load, load the most recent project
         window.onload = () => {
-            updateRecentProjects();
+            /* updateRecentProjects();
             const projects = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
@@ -653,7 +1138,7 @@
             if (projects.length > 0) {
                 const mostRecentProject = projects.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
                 loadGameState(mostRecentProject.name);
-            }
+            } */
         };
 
         
@@ -665,21 +1150,21 @@
     // let currentProject = null;
 
     // Generate a default Solana public address
-    function generateSolanaAddress() {
+    /* function generateSolanaAddress() {
         const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
         let address = 'Solana';
         for (let i = 0; i < 32; i++) {
             address += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         return address;
-    }
+    } */
 
-    function goToHome() {
-        window.location.href = "index.html";
-    }
+    // function goToHome() {
+    //     window.location.href = "index.html";
+    // }
 
     // Save Solana address to LocalStorage
-    function saveSolanaAddress() {
+    /* function saveSolanaAddress() {
         if (!localStorage.getItem('solanaAddress')) {
             const address = generateSolanaAddress();
             localStorage.setItem('solanaAddress', address);
@@ -691,14 +1176,16 @@
         const address = localStorage.getItem('solanaAddress');
         document.getElementById('solanaAddress').textContent = address;
     }
-
+ */
     // Toggle profile popup
     function toggleProfilePopup() {
         const popup = document.getElementById('profilePopup');
+        popup.style.display = 'block';
         popup.classList.toggle('active');
 
         // profilePopup.style.display = 'block';
-        popup.style.display = (popup.style.display === "block") ? 'none' : "block";
+        // popup.style.display = (popup.style.display === "block") ? 'none' : "block";
+        
     }
 
     // Extract HTML, CSS, and JavaScript from the AI response
@@ -791,7 +1278,7 @@
 
     // On page load, initialize Solana address and load recent projects
     window.onload = () => {
-        saveSolanaAddress();
+        /* saveSolanaAddress();
         displaySolanaAddress();
         updateRecentProjects();
         const projects = [];
@@ -805,7 +1292,7 @@
         if (projects.length > 0) {
             const mostRecentProject = projects.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
             loadGameState(mostRecentProject.name);
-        }
+        } */
     };
 </script>
 
@@ -841,6 +1328,9 @@
             selectedItemsDiv.innerHTML = Array.from(selectedItems[category]).map(item => `<span onclick="toggleSelection('${category}', '${item}')">${item}</span>`).join('');
         }
 
+
+        //TODO::: SOME IMPROVEMENTS WOULD HAPPEN HERE... THE NEED FOR SOME FIXES...
+
         // Link codeTextarea and gameOutput
         const codeTextarea = document.getElementById('codeTextarea');
         const gameOutput = document.getElementById('gameOutput');
@@ -863,8 +1353,15 @@
             document.getElementById('generateButton').style.display = 'none';
             document.getElementById('loadingSpinner').style.display = 'inline-block';
 
+            const gameOutput = document.getElementById('gameOutput');
+            // const codeOutput = document.getElementById('codeOutput');
+            const codeOutput = document.getElementById('codeTextarea');
+
+            console.log("the details code: "+codeOutput.value);
+            console.log("the details game - iframe: "+gameOutput.srcdoc);
+
             try {
-                const response = await fetch('/generate', {
+                const response = await fetch(URL__+'/generate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -872,7 +1369,7 @@
                     body: JSON.stringify({
                         prompt,
                         solanaAddress,
-                        game_state: "",
+                        code_state: codeTextarea.value,
                         emojis: Array.from(selectedItems.emojis),
                         platformers: Array.from(selectedItems.platformers),
                         effects: Array.from(selectedItems.effects),
@@ -907,8 +1404,8 @@
 
         // On page load, initialize Solana address and load recent projects
         window.onload = () => {
-            saveSolanaAddress();
-            displaySolanaAddress();
+            // saveSolanaAddress();
+            // displaySolanaAddress();
             updateRecentProjects();
             const projects = [];
             for (let i = 0; i < localStorage.length; i++) {

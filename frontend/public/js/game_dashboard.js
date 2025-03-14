@@ -1,3 +1,33 @@
+
+var MAINNET_RPC_ENDPOINTS = [
+    'https://rpc.mainnet-alpha.sonic.game',
+    'https://api.mainnet-alpha.sonic.game', // Primary
+    'https://sonic.helius-rpc.com/', // Backup 1
+    // 'https://ssc-dao.genesysgo.net', // Backup 2
+];
+
+
+function getAllUrlParams(url) {
+    // Create an object to store the parameters
+    let params = {};
+
+    // Get the query string part of the URL
+    let queryString = url.split('?')[1];
+
+    if (queryString) {
+        // Split the query string into individual key-value pairs
+        let pairs = queryString.split('&');
+
+        // Loop through each pair and populate the params object
+        pairs.forEach(pair => {
+            let [key, value] = pair.split('=');
+            params[key] = decodeURIComponent(value || '');
+        });
+    }
+
+    return params;
+}
+
 function getUrlParam(url, paramName) {
     // Get all parameters using the previous function
     let params = getAllUrlParams(url);
@@ -7,12 +37,7 @@ function getUrlParam(url, paramName) {
 }
 
 
-var MAINNET_RPC_ENDPOINTS = [
-    'https://rpc.mainnet-alpha.sonic.game',
-    'https://api.mainnet-alpha.sonic.game', // Primary
-    'https://sonic.helius-rpc.com/', // Backup 1
-    // 'https://ssc-dao.genesysgo.net', // Backup 2
-];
+
 
 
 // Updated network setup function

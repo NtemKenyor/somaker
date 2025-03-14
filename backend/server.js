@@ -138,7 +138,7 @@ app.get(MAIN_DIR+"/api/metadata", async (req, res) => {
 
 
 // Generate game content using DeepSeek API
-app.post('/generate', async (req, res) => {
+/* app.post('/generate', async (req, res) => {
     const { prompt, solanaAddress, code_state, emojis, platformers, effects } = req.body;
 
     try {
@@ -149,7 +149,7 @@ app.post('/generate', async (req, res) => {
                 messages: [
                     {
                         role: 'system',
-                        content: `You are a web Game developer. Return an HTML game with embedded CSS and JavaScript. Do not assume that the User is experience: so always return all the need lines of HTML code and make sure that you always improve the curent code state based on the users prompt. Users should be able to click a floating start button or event listener to scroll into view to start playing the game. Use the following elements in the game:
+                        content: `You are a web Game developer. Return an HTML game with embedded CSS and JavaScript. Do not assume that the User is experience: so always return all the need lines of HTML code and make sure that you always improve the curent code state based on the users prompt. Users should be able to click a floating start button or event listener to detect a scroll into view to start playing the game. Use the following elements in the game:
                         - The current code state: ${code_state}
                         - Emojis: ${emojis.join(', ')}
                         - Platformers: ${platformers.join(', ')}
@@ -177,7 +177,67 @@ app.post('/generate', async (req, res) => {
         res.status(500).json({ error: 'Failed to generate game content' });
     }
 });
+ */
 
+// Generate game content using DeepSeek API
+app.post('/generate', async (req, res) => {
+    const { prompt, solanaAddress, code_state, emojis, platformers, effects } = req.body;
+
+    try {
+        // Construct the system message dynamically
+        let systemMessage = `You are a web Game developer. Return an HTML game with embedded CSS and JavaScript. Do not assume that the User is experienced: so always return all the necessary lines of HTML code and make sure that you always improve the current code state based on the user's prompt. Users should be able to click a floating start button or use an event listener to detect a scroll into view to start playing the game.`;
+
+        // Add code_state if it exists
+        if (code_state && code_state.trim() !== '') {
+            systemMessage += `\n- The current code state: ${code_state}`;
+        }
+
+        // Add emojis if the array is not empty
+        if (emojis && emojis.length > 0) {
+            systemMessage += `\n- Emojis: ${emojis.join(', ')}`;
+        }
+
+        // Add platformers if the array is not empty
+        if (platformers && platformers.length > 0) {
+            systemMessage += `\n- Platformers: ${platformers.join(', ')}`;
+        }
+
+        // Add effects if the array is not empty
+        if (effects && effects.length > 0) {
+            systemMessage += `\n- Effects: ${effects.join(', ')}`;
+        }
+
+        const response = await axios.post(
+            DEEPSEEK_API_URL,
+            {
+                model: 'deepseek-chat', // Use the most recent DeepSeek model
+                messages: [
+                    {
+                        role: 'system',
+                        content: systemMessage,
+                    },
+                    {
+                        role: 'user',
+                        content: `Generate a game based on the following prompt: ${prompt}`,
+                    },
+                ],
+                stream: false,
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+        const generatedContent = response.data.choices[0].message.content;
+        res.json({ content: generatedContent });
+    } catch (error) {
+        console.error('Error calling DeepSeek API:', error);
+        res.status(500).json({ error: 'Failed to generate game content' });
+    }
+});
 
 app.post(MAIN_DIR+"/api/create-post", async (req, res) => {
     const { encryptedPrivateKey, publicKey, title, content, image_url, author, date, network_pref, others } = req.body;
@@ -246,6 +306,61 @@ app.post(MAIN_DIR+"/api/create-post", async (req, res) => {
         res.status(500).json({ error: "Failed to create post", details: err });
     }
 });
+
+
+// Ensure the gameProjects folder exists
+/* const gameProjectsDir = path.join(__dirname, 'gameProjects');
+if (!fs.existsSync(gameProjectsDir)) {
+    fs.mkdirSync(gameProjectsDir);
+} */
+const gameProjectsDir = path.join(__dirname, '../../gameProjects');
+if (!fs.existsSync(gameProjectsDir)) {
+    fs.mkdirSync(gameProjectsDir, { recursive: true }); // Create the folder if it doesn't exist
+}
+
+// Generate a unique project name
+function generateUniqueName() {
+    return crypto.randomBytes(16).toString('hex'); // Generates a 32-character random string
+}
+
+// Endpoint to save the game project
+app.post('/launch', (req, res) => {
+    const { code } = req.body;
+
+    if (!code) {
+        return res.status(400).json({ error: 'No code provided' });
+    }
+
+    // Generate a unique project name
+    const projectName = generateUniqueName();
+    const projectPath = path.join(gameProjectsDir, `${projectName}.html`);
+
+    // Save the code to the file
+    fs.writeFile(projectPath, code, (err) => {
+        if (err) {
+            console.error('Error saving project:', err);
+            return res.status(500).json({ error: 'Failed to save project' });
+        }
+
+        // Return the link to the user
+        const projectLink = `http://localhost:${port}/game/${projectName}`;
+        res.json({ link: projectLink });
+    });
+});
+
+// Serve the game project
+app.get('/game/:projectName', (req, res) => {
+    const projectName = req.params.projectName;
+    const projectPath = path.join(gameProjectsDir, `${projectName}.html`);
+
+    if (!fs.existsSync(projectPath)) {
+        return res.status(404).send('Game not found');
+    }
+
+    res.sendFile(projectPath);
+});
+
+
 
 
 app.listen(PORT, () => {
