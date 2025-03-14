@@ -400,8 +400,8 @@ async function loadPosts() {
 
         FinalsortedData.forEach((entry) => {
             const othersObj = JSON.parse(entry.metadata.others);
-            console.log("from json: "+ othersObj.product_id );
-            console.log("from variable: "+ default_product_id);
+            // console.log("from json: "+ othersObj.product_id );
+            // console.log("from variable: "+ default_product_id);
             if(othersObj.product_id === default_product_id){
                 const post = entry.metadata;
                 const postDiv = document.createElement("div");

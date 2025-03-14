@@ -1095,12 +1095,12 @@ function loadRandomTemplate() {
 }
 
 // Initialize templates and load a random template if currentProject is null
-window.onload = () => {
-  generateTemplateItems();
+// window.onload = () => {
+//   generateTemplateItems();
 
-  if (!currentProject) {
-      loadRandomTemplate();
-  }
+//   // if (!currentProject && document.getElementById('codeTextarea').value == "" ) {
+//   //     loadRandomTemplate();
+//   // }
 
-  // Other initialization code...
-};
+//   // Other initialization code...
+// };

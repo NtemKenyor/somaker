@@ -11,8 +11,8 @@
     <!-- <script src="js/forge.min.js" defer></script> -->
     <!-- <script src="js/marked.min.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-    
-    
+    <script src="js/game_tempates.js?id=884758573975873857" defer></script>
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -380,7 +380,7 @@
     
         /* Hover effect */
         .profile-popup:hover {
-            transform: scale(1.05);
+            /* transform: scale(1.05); */
             box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
         }
     </style>
@@ -866,12 +866,12 @@
         }
 
         // Close when clicking outside the popup
-        document.addEventListener('click', function(event) {
+        /* document.addEventListener('click', function(event) {
             const popup = document.getElementById('profilePopup');
             if (event.target !== popup && !popup.contains(event.target)) {
                 popup.style.display = 'none';
             }
-        });
+        }); */
 
         function goToHome() {
             window.location.href = "index.html";
@@ -1126,22 +1126,6 @@ function ensurePopupHTML() {
 
 
 
-        // On page load, load the most recent project
-        window.onload = () => {
-            /* updateRecentProjects();
-            const projects = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('project_')) {
-                    const project = JSON.parse(localStorage.getItem(key));
-                    projects.push(project);
-                }
-            }
-            if (projects.length > 0) {
-                const mostRecentProject = projects.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
-                loadGameState(mostRecentProject.name);
-            } */
-        };
 
         
     </script>
@@ -1183,7 +1167,7 @@ function ensurePopupHTML() {
     function toggleProfilePopup() {
         const popup = document.getElementById('profilePopup');
         popup.style.display = 'block';
-        popup.classList.toggle('active');
+        // popup.classList.toggle('active');
 
         // profilePopup.style.display = 'block';
         // popup.style.display = (popup.style.display === "block") ? 'none' : "block";
@@ -1278,24 +1262,6 @@ function ensurePopupHTML() {
 
 
 
-    // On page load, initialize Solana address and load recent projects
-    window.onload = () => {
-        /* saveSolanaAddress();
-        displaySolanaAddress();
-        updateRecentProjects();
-        const projects = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key.startsWith('project_')) {
-                const project = JSON.parse(localStorage.getItem(key));
-                projects.push(project);
-            }
-        }
-        if (projects.length > 0) {
-            const mostRecentProject = projects.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
-            loadGameState(mostRecentProject.name);
-        } */
-    };
 </script>
 
 
@@ -1408,7 +1374,10 @@ function ensurePopupHTML() {
         window.onload = () => {
             // saveSolanaAddress();
             // displaySolanaAddress();
-            updateRecentProjects();
+            updateRecentProjects(); // load recent projects
+            generateTemplateItems(); // load the templates
+
+
             const projects = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
@@ -1418,14 +1387,17 @@ function ensurePopupHTML() {
                 }
             }
             if (projects.length > 0) {
+                console.log("loading most recent project...");
                 const mostRecentProject = projects.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
                 loadGameState(mostRecentProject.name);
+            }else{
+                console.log("loading a random template");
+                loadRandomTemplate();
             }
         };
     </script>
 
-<script src="js/game_dashboard.js?id=02847583759" defer></script>
-<script src="js/game_tempates.js?id=748568375737583" defer></script>
+<script src="js/game_dashboard.js?id=87485739575" defer></script>
 
 </body>
 </html>
