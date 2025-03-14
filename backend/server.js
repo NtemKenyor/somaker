@@ -182,7 +182,7 @@ app.get(MAIN_DIR+"/api/metadata", async (req, res) => {
  */
 
 // Generate game content using DeepSeek API
-app.post('/generate', async (req, res) => {
+app.post(MAIN_DIR+'/generate', async (req, res) => {
     const { prompt, solanaAddress, code_state, emojis, platformers, effects } = req.body;
 
     try {
