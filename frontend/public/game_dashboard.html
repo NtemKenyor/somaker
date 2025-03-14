@@ -12,7 +12,7 @@
     <!-- <script src="js/marked.min.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     
-    <script src="js/game_dashboard.js?id=4756583738578792" defer></script>
+    <script src="js/game_dashboard.js?id=89457853758" defer></script>
 
     <style>
         body {
@@ -807,9 +807,9 @@
         }
 
         // Launch game
-        function launchGame() {
-            alert("Game launched! 🎮 - Not allowed Yet.");
-        }
+        // function launchGame() {
+        //     alert("Game launched! 🎮 - Not allowed Yet.");
+        // }
 
         // Launch game
         async function launchGame() {
@@ -1201,7 +1201,7 @@ function ensurePopupHTML() {
         return { html, css, js };
     }
 
-    let URL__ = window.NODE_URL;
+    // let URL__ = window.NODE_URL;
 
     // // Send game prompt to the Node server
     // async function generateGame() {
@@ -1361,7 +1361,7 @@ function ensurePopupHTML() {
             console.log("the details game - iframe: "+gameOutput.srcdoc);
 
             try {
-                const response = await fetch(URL__+'/generate', {
+                const response = await fetch(window.NODE_URL+'/generate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
