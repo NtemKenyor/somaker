@@ -892,7 +892,7 @@ async function getBalance() {
     console.log("The Wallet balance: " + balance);
 
     const balanceInSOL = Math.floor((balance / solanaWeb3.LAMPORTS_PER_SOL) * 100) / 100;
-    document.getElementById('balance').textContent = '💰: ' + balanceInSOL + ' SOL';
+    document.getElementById('balance').textContent = '💰: ' + balanceInSOL + ' SOL ⚡ ';
 
     // Show pop-up if balance is less than 0.5 SOL
     if (balanceInSOL < 0.5) {

@@ -13,7 +13,31 @@
     /* z-index: 1000; */
     z-index: 50;
     border-radius: 12px;
+    overflow-y: scroll;
+
 }
+
+/* Custom scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.profilepopup::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+}
+
+.profilepopup::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); /* Transparent track */
+    border-radius: 10px; /* Rounded corners */
+}
+
+.profilepopup::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5); /* Semi-transparent thumb */
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid transparent; /* Transparent border */
+    background-clip: padding-box; /* Prevent background from bleeding into the border */
+}
+
+.profilepopup::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.8); /* Brighter thumb on hover */
+}
+
 
 .profilepopup-content {
     /* background: linear-gradient(135deg, red, blue); */
@@ -83,8 +107,9 @@
     gap: 15px;
     justify-content: center;
     align-items: center;
-    
+    flex-direction: column;
 }
+
 
 /*.profile_btn {
     display: flex;
@@ -105,6 +130,7 @@
 
 .profile_btn{
     display: flex;
+    color: #fefefe;
 }
 
 .profile_btn:hover {
