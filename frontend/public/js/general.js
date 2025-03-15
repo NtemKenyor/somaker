@@ -249,7 +249,7 @@ async function BuildNetwork(network) {
         window.NODE_URL = "https://roynek.com/somaker/backend";
         window.PHP_URL = "https://roynek.com/cloudS/interact/server";
         // return new solanaWeb3.Connection('https://spring-quick-surf.solana-devnet.quiknode.pro/016ff48f0f7c3f1520e515c01dca9a83ef528317', 'confirmed');
-       return new solanaWeb3.Connection('https://api.testnet.sonic.game/', 'confirmed');
+        return new solanaWeb3.Connection('https://api.testnet.sonic.game/', 'confirmed');
     } else if (network === "local" || network === "localnet") {
         window.NODE_URL = "http://localhost:3000/somaker/backend";
         window.PHP_URL = "http://localhost/cloudS/interact/server";
