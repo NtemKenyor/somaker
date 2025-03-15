@@ -333,7 +333,7 @@ function generateUniqueName() {
 }
 
 // Endpoint to save the game project
-app.post('/launch', (req, res) => {
+app.post(MAIN_DIR+'/launch', (req, res) => {
     const { code } = req.body;
 
     if (!code) {
@@ -358,7 +358,7 @@ app.post('/launch', (req, res) => {
 });
 
 // Serve the game project
-app.get('/game/:projectName', (req, res) => {
+app.get(MAIN_DIR+'/game/:projectName', (req, res) => {
     const projectName = req.params.projectName;
     const projectPath = path.join(gameProjectsDir, `${projectName}.html`);
 
