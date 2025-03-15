@@ -864,7 +864,7 @@ function loadPrivateKeyFile(event) {
 // const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
 
 // Fetch wallet balance
-async function getBalance() {
+/* async function getBalance() {
     if (!keypair) {
         alert('No wallet found. Create or load a wallet first.');
         return;
@@ -878,13 +878,40 @@ async function getBalance() {
 
     // little_profile();
 }
+ */
 
-// async function little_profile(){
-//     // const balanceDisplay = document.getElementById('balance');
-//     const publicKeyDisplayer = document.getElementById('publicKey');
-//     publicKeyDisplayer.value = keypair.publicKey.toBase58();
 
-// }
+// Fetch wallet balance
+async function getBalance() {
+    if (!keypair) {
+        alert('No wallet found. Create or load a wallet first.');
+        return;
+    }
+
+    const balance = await window.connection.getBalance(keypair.publicKey);
+    console.log("The Wallet balance: " + balance);
+
+    const balanceInSOL = Math.floor((balance / solanaWeb3.LAMPORTS_PER_SOL) * 100) / 100;
+    document.getElementById('balance').textContent = '💰: ' + balanceInSOL + ' SOL';
+
+    // Show pop-up if balance is less than 0.5 SOL
+    if (balanceInSOL < 0.5) {
+        showWalletFundingPopup();
+    }
+}
+
+// Show wallet funding pop-up
+function showWalletFundingPopup() {
+    const popup = document.getElementById('walletFundingPopup');
+    popup.style.display = 'flex';
+}
+
+// Close wallet funding pop-up
+function closeWalletFundingPopup() {
+    const popup = document.getElementById('walletFundingPopup');
+    popup.style.display = 'none';
+}
+
 
 async function redirectToPageWithData(pageUrl, publicKey) {
     const urlWithParams = `${pageUrl}?public_key=${encodeURIComponent(publicKey)}`; // Add data to URL
