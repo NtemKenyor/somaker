@@ -845,6 +845,7 @@
                         metadata: {
                             title: 'New Game Launched',
                             content: `Check out my new game:\n\n{{element|type=iframe|src=${projectLink}}}`,
+                            image_url: "",
                             author: 'Game Creator',
                         },
                     });
@@ -884,6 +885,7 @@ async function d_post_sharer(entry){
     await make_some_post({
         title: post.title,
         content: post.content,
+        image_url: post.image_url,
         author: post.author,
         others: JSON.stringify({
             nft: "false",
@@ -905,10 +907,11 @@ async function d_post_sharer(entry){
 
 
 async function make_some_post({
-    title = document.getElementById("title").value,
-    content = document.getElementById("content").value,
-    image_url = document.getElementById("image_url").value,
-    author = document.getElementById("author").value || keypair.publicKey.toBase58(),
+    title,
+    content,
+    image_url,
+    author,
+    // author = document.getElementById("author").value || keypair.publicKey.toBase58(),
     others = {
         nft: "false",
         nude: "false",

@@ -1015,24 +1015,11 @@ function getSVGIcon(type) {
 
 // Updated make_some_post function
 async function make_some_post({
-    title = document.getElementById("title").value,
-    content = document.getElementById("content").value,
-    image_url = document.getElementById("image_url").value,
-    author = document.getElementById("author").value || keypair.publicKey.toBase58(),
-    others = {
-        nft: "false",
-        nude: "false",
-        encryption: "",
-        share: "false",
-        comment: "false",
-        main_post_id: "", 
-        category: "entertainment",
-        hash: "",
-        pubkey: keypair.publicKey.toBase58(),
-        ip: "",
-        geo: "LAT, LONG",
-        others: ""
-    },
+    title,
+    content,
+    image_url,
+    author,
+    others = {},
     encryption_type = "" // New parameter
 } = {}) {
     try {
@@ -1146,6 +1133,7 @@ async function d_post_sharer(entry){
     await make_some_post({
         title: post.title,
         content: post.content,
+        image_url: post.image_url,
         author: post.author,
         others: JSON.stringify({
             nft: "false",
