@@ -1151,6 +1151,21 @@ async function encryptPrivateKey(publicKeyPem, privateKey) {
             downloadLink.click();
         }
 
+        // Function to return SVG icons based on the type
+        function getSVGIcon(type) {
+            switch (type) {
+                case "success":
+                    return `<svg width="24" height="24" fill="#28a745" xmlns="http://www.w3.org/2000/svg"><path d="M20.285 6.582l-1.422-1.422-8.285 8.283-3.18-3.18-1.423 1.422 4.602 4.603z"></path></svg>`;
+                case "warning":
+                    return `<svg width="24" height="24" fill="#ffc107" xmlns="http://www.w3.org/2000/svg"><path d="M1 21h22L12 2 1 21zM12 18h-.01v-2h.01v2zm-.01-4h.01V10h-.01v4z"></path></svg>`;
+                case "error":
+                    return `<svg width="24" height="24" fill="#dc3545" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L2 21h20L12 1zm0 16a1 1 0 100-2 1 1 0 000 2zm1-6h-2v6h2V11z"></path></svg>`;
+                default:
+                    return "";
+            }
+        }
+
+
 
         
     </script>
