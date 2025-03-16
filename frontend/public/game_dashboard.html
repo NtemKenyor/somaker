@@ -1008,126 +1008,148 @@ async function encryptPrivateKey(publicKeyPem, privateKey) {
 }
 
 
-// Function to show a pop-up
-function showPopup(type, title, message, extra_data=null, stay_time=5000) {
-    ensurePopupHTML();
 
-    const popup = document.createElement("div");
-    popup.className = `popup ${type}`;
-    popup.innerHTML = `
-        <div class="popup-icon">${getSVGIcon(type)}</div>
-        <div class="popup-content">
-            <strong>${title}</strong>
-            <p>${message}</p>
-        </div>
-        <button class="popup-close" aria-label="Close">&times;</button>
-    `;
-    
-    // Add the popup to the container
-    const container = document.getElementById("popup-container");
-    container.appendChild(popup);
+        // Function to show a pop-up
+        function showPopup(type, title, message, extra_data=null, stay_time=5000) {
+                    ensurePopupHTML();
 
-    // Add event listener for close button
-    const closeButton = popup.querySelector(".popup-close");
-    closeButton.addEventListener("click", () => popup.remove());
+                    const popup = document.createElement("div");
+                    popup.className = `popup ${type}`;
+                    popup.innerHTML = `
+                        <div class="popup-icon">${getSVGIcon(type)}</div>
+                        <div class="popup-content">
+                            <strong>${title}</strong>
+                            <p>${message}</p>
+                        </div>
+                        <button class="popup-close" aria-label="Close">&times;</button>
+                    `;
+                    
+                    // Add the popup to the container
+                    const container = document.getElementById("popup-container");
+                    container.appendChild(popup);
 
-    // Automatically remove pop-up after 5 seconds if not manually closed
-    setTimeout(() => {
-        if (popup.parentElement) popup.remove();
+                    // Add event listener for close button
+                    const closeButton = popup.querySelector(".popup-close");
+                    closeButton.addEventListener("click", () => popup.remove());
 
-        if(type="success" && extra_data != null){
-            // Ask the user if they want to download the editing keys
-            const userWantsToDownload = confirm(
-                "Your post editing keys are ready. Would you like to download them now?"
-            );
-            // Downloading the edit keys and reloading the page...
-            if (userWantsToDownload) {
-                downloadDJSON(extra_data);
-                // Reload the page with `page_shuffle=false`
-                shufflePageReload("false");
+                    // Automatically remove pop-up after 5 seconds if not manually closed
+                    setTimeout(() => {
+                        if (popup.parentElement) popup.remove();
+
+                        if(type="success" && extra_data != null){
+                            // Ask the user if they want to download the editing keys
+                            const userWantsToDownload = confirm(
+                                "Your post editing keys are ready. Would you like to download them now?"
+                            );
+                            // Downloading the edit keys and reloading the page...
+                            if (userWantsToDownload) {
+                                downloadDJSON(extra_data);
+                                // Reload the page with `page_shuffle=false`
+                                shufflePageReload("false");
+                            }
+                        }
+                        
+                    }, stay_time);
+                }
+
+
+        // Function to inject pop-up HTML and styles if not already on the page
+        function ensurePopupHTML() {
+            if (!document.getElementById("popup-container")) {
+                const container = document.createElement("div");
+                container.id = "popup-container";
+                container.style.position = "fixed";
+                container.style.top = "10px";
+                container.style.right = "10px";
+                container.style.width = "320px";
+                container.style.zIndex = "9999";
+                document.body.appendChild(container);
+
+                // Inject styles directly into the page
+                const style = document.createElement("style");
+                style.textContent = `
+                    #popup-container {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+                    .popup {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        background: #fff;
+                        color: #000;
+                        border-radius: 8px;
+                        padding: 15px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                        border-left: 5px solid;
+                        animation: fadeIn 0.3s ease-in-out;
+                        position: relative;
+                    }
+                    .popup.success { border-color: #28a745; }
+                    .popup.warning { border-color: #ffc107; }
+                    .popup.error { border-color: #dc3545; }
+                    .popup-icon {
+                        flex-shrink: 0;
+                        margin-right: 15px;
+                    }
+                    .popup-content {
+                        flex: 1;
+                    }
+                    .popup-content strong {
+                        display: block;
+                        font-size: 1rem;
+                        margin-bottom: 5px;
+                    }
+                    .popup-content p {
+                        font-size: 0.875rem;
+                        margin: 0;
+                    }
+                    .popup-close {
+                        background: none;
+                        border: none;
+                        broder: 2px dotted #00A;
+                        font-size: 1.2rem;
+                        color: #333;
+                        cursor: pointer;
+                        margin-left: 10px;
+                        transition: color 0.2s;
+                    }
+                    .popup-close:hover {
+                        color: #000;
+                    }
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(-10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                `;
+                document.head.appendChild(style);
             }
         }
-        
-    }, stay_time);
-}
 
+        function shufflePageReload(state="false"){
+            const currentUrl = new URL(window.location.href);
+            if (currentUrl.searchParams.has("page_shuffle")) {
+                currentUrl.searchParams.set("page_shuffle", state);
+            } else {
+                currentUrl.searchParams.append("page_shuffle", state);
+            }
+            window.location.href = currentUrl.toString();
+        }
 
-// Function to inject pop-up HTML and styles if not already on the page
-function ensurePopupHTML() {
-    if (!document.getElementById("popup-container")) {
-        const container = document.createElement("div");
-        container.id = "popup-container";
-        container.style.position = "fixed";
-        container.style.top = "10px";
-        container.style.right = "10px";
-        container.style.width = "320px";
-        container.style.zIndex = "9999";
-        document.body.appendChild(container);
+        function downloadDJSON(result){
+            const jsonContent = JSON.stringify({
+                edit_key: result.edit_key,
+                signature: result.signature,
+            }, null, 2);
 
-        // Inject styles directly into the page
-        const style = document.createElement("style");
-        style.textContent = `
-            #popup-container {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-            .popup {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                background: #fff;
-                color: #000;
-                border-radius: 8px;
-                padding: 15px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                border-left: 5px solid;
-                animation: fadeIn 0.3s ease-in-out;
-                position: relative;
-            }
-            .popup.success { border-color: #28a745; }
-            .popup.warning { border-color: #ffc107; }
-            .popup.error { border-color: #dc3545; }
-            .popup-icon {
-                flex-shrink: 0;
-                margin-right: 15px;
-            }
-            .popup-content {
-                flex: 1;
-            }
-            .popup-content strong {
-                display: block;
-                font-size: 1rem;
-                margin-bottom: 5px;
-            }
-            .popup-content p {
-                font-size: 0.875rem;
-                margin: 0;
-            }
-            .popup-close {
-                background: none;
-                border: none;
-                broder: 2px dotted #00A;
-                font-size: 1.2rem;
-                color: #333;
-                cursor: pointer;
-                margin-left: 10px;
-                transition: color 0.2s;
-            }
-            .popup-close:hover {
-                color: #000;
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-}
-
-
-
+            // Create a blob and download link
+            const blob = new Blob([jsonContent], { type: "application/json" });
+            const downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = "post_editing_keys.json";
+            downloadLink.click();
+        }
 
 
         
