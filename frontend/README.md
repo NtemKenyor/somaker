@@ -6,7 +6,7 @@
 
 # Frontend for Solana DApp
 
-This directory contains the static files for the frontend user interface. It communicates with the backend API to fetch data and display posts from the Solana blockchain.
+This directory contains the static files for the frontend user interface. It communicates with the backend API to fetch data and display posts from the Sonic SVM.
 
 ## Directory Structure
 
