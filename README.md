@@ -54,6 +54,9 @@ We are a team of passionate developers who believe in the power of code to trans
 - **Ntem, Kenyor** - Lead - Web3 Expert - [X (Twitter)](https://x.com/NKenyor)
 - **Genzy Bassey** - [X (Twitter)](https://x.com/genzy_bassey)
 
+## **Connect With Us**  
+🔗 **Website:** [Somaker](https://roynek.com/somaker/frontend/public/index.html)  
+
 ---
 Let’s build the future of Web3 game creation together! 🚀
 
