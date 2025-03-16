@@ -77,7 +77,9 @@ const { deserialize } = require("borsh");
 require('dotenv').config();
 
 // // 7sGT7oBKSetii8mspduzWR8EeYq86z51v9BdwfkEW2Wr
-const programId = new PublicKey("A6GEfSbfhFa1H41sUVfeyZM9riLi3SdGaEjGjHaxFQvs");
+// const programId = new PublicKey("A6GEfSbfhFa1H41sUVfeyZM9riLi3SdGaEjGjHaxFQvs");
+let programId = new PublicKey("A6GEfSbfhFa1H41sUVfeyZM9riLi3SdGaEjGjHaxFQvs");
+let devProgramId = new PublicKey("HFVqnPDCPdtQF5mArXP7siH9uVz75wUAupzEEUmmLd57");
 
 
 class PostMetadata {
@@ -102,7 +104,7 @@ const postMetadataSchema = new Map([
     ]}],
 ]);
 
-async function fetchMetadataForAccounts(rpcUrl) {
+async function fetchMetadataForAccounts(rpcUrl, network) {
     const accountMetadata = [];
 
     // const connection = (network === "localhost" || network === "developmet") 
@@ -111,6 +113,10 @@ async function fetchMetadataForAccounts(rpcUrl) {
 
     // const connection = new Connection("https://spring-quick-surf.solana-devnet.quiknode.pro/016ff48f0f7c3f1520e515c01dca9a83ef528317 ", "confirmed");
     const connection = new Connection(rpcUrl, 'confirmed');
+
+    if(network === "devnet" || network === "dev"){
+        programId = devProgramId;
+    }
 
     try {
         const programAccounts = await connection.getProgramAccounts(programId, {
