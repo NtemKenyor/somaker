@@ -1,8 +1,7 @@
 # Testing Guide for SoMaker
 
 ## Overview
-SoMaker simplifies testing by allowing users to switch between different networks using URL parameters. The default network is **Mainnet**, but users can switch to **Testnet (Devnet)** or even a **local server** for testing purposes.
-
+SoMaker streamlines your testing process by enabling seamless network switching through simple URL parameters. By default, the platform connects to Mainnet, but with just a quick adjustment, you can effortlessly switch to Testnet (Devnet) or even a local server—perfect for testing and development. This flexibility ensures a smoother, more efficient workflow, whether you're deploying dApps, debugging, or experimenting in a controlled environment.
 ---
 
 ## Testing Different Networks
