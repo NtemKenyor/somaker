@@ -70,7 +70,7 @@ const Navbar = () => {
                         className="font-medium flex items-center p-2"
                         style={{ color: "black" }}
                       >
-                        About Us
+                        Leaderboard 
 
                       </button>
                     </Link></summary>
@@ -90,19 +90,7 @@ const Navbar = () => {
                     </Link></summary>
                   </details></li>
 
-                <li>
-                  <details>
-                    <summary><Link href="/docs">
-                      <button
-                        className="font-medium flex items-center p-2"
-                        style={{ color: "black" }}
-                      >
-                        Docs
-
-                      </button>
-                    </Link></summary>
-                  </details>
-                </li>
+                
                 <div className="mt-5 flex w-full justify-evenly items-center gap-x-10">
 
                   <i className="fa-brands fa-twitter text-base text-green-600" />
@@ -127,7 +115,7 @@ const Navbar = () => {
         <div className="navbar text-white py-3 hidden lg:flex rounded-b-[35px] px-10 items-center" style={{ background: 'radial-gradient(circle, #195B41, #101916)' }}>
           <div className="navbar-start">
             <Link className="btn mt-5 btn-ghost hidden lg:block text-xl ml-5" href="/">
-              <Image alt="somaker_logo" width={150} height={50} src="/logos/somaker-logo.svg" />
+              <Image alt="somaker_logo" width={50} height={5} src="/logo.png" />
             </Link>
           </div>
           <div className="navbar-center hidden lg:flex ">
@@ -146,7 +134,7 @@ const Navbar = () => {
                 <Link href="/signup-form" className="font-medium flex items-center"
                   style={{ color: "white" }}>
 
-                  About 
+                  Leaderboard 
 
 
                 </Link>
@@ -169,7 +157,7 @@ const Navbar = () => {
 
           </div>
           <div className="navbar-end">
-            <button className="rounded-[30px] text-white hover:border-gray-700 border-white border-[0.5px] py-3 hidden lg:block lg:px-5 hover:bg-gray-700">Get Started</button>
+            <button className="rounded-[30px] text-white hover:border-gray-700 border-white border-[0.5px] py-3 hidden lg:block lg:px-5 hover:bg-gray-700">Connect Wallet</button>
           </div>
         </div>
         {/* END OF WEB RESPONSIVENESS */}
