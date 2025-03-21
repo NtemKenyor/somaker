@@ -316,7 +316,9 @@ async function setupNetwork(network="mainnet"){
     console.log("Current Blockchain Network:", window.connection);
 }
 
+//Also used in the profile_and_post.js
 let default_product_id = "75hfru%r47gjtu5jreno4";
+
 const default_post = [
     {
         "pubkey": "5vDfnGGr6VzDCM2hAtCx3h1G113FC5SFm5hMs88Nf7yR",

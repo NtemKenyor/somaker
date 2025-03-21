@@ -10,6 +10,9 @@ dzTPXfB1KuP5bMo8sPvz6Nb2Zw9vB8rvW/iQnlrLq9OGefQDr2QfxUdQLJVwCBnv
 IQIDAQAB
 -----END PUBLIC KEY-----`;
 
+var product_unique_id = "75hfru%r47gjtu5jreno4";
+
+
 /* const serverPublicKeyPem = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtHgtagCME1poS0dvx43g
 BsRW9tkrLQKXqraLSc2hltMTbWMv8IVQPJvJkAtzBGtb0u1hjH8l4Q1AXkio348R
@@ -1147,10 +1150,14 @@ async function d_post_sharer(entry){
             pubkey: keypair.publicKey.toBase58(),
             ip: "", // TODO: we would get this...
             geo: ",", //TODO: We would get this and it would be the LAT,LONG
+            // product_id: default_product_id,
+            product_id: product_unique_id,
             others: ""
         })
     });
 }
+
+
 
 async function d_main_play(entry) {
     try {
