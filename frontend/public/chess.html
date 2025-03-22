@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Chess Game</title>
+  <style>
+    /* Embedded CSS */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .chessboard {
+      display: grid;
+      grid-template-columns: repeat(8, min(10vw, 50px));
+      grid-template-rows: repeat(8, min(10vw, 50px));
+      border: 2px solid #333;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .square {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: min(5vw, 24px);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .square.light {
+      background-color: #f0d9b5;
+    }
+
+    .square.dark {
+      background-color: #b58863;
+    }
+
+    .square.highlight {
+      background-color: #aaffaa;
+    }
+
+    .square.selected {
+      background-color: #ffaa00;
+    }
+  </style>
+</head>
+<body>
+  <div class="chessboard" id="chessboard">
+    <!-- Chessboard squares will be generated here -->
+  </div>
+
+  <script>
+    // Embedded JavaScript
+    const chessboard = document.getElementById('chessboard');
+
+    // Define the initial chess piece positions
+    const initialPieces = [
+      ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
+      ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
+      ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖']
+    ];
+
+    // Create the chessboard
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const square = document.createElement('div');
+        square.classList.add('square');
+        square.classList.add((row + col) % 2 === 0 ? 'light' : 'dark');
+        square.id = String.fromCharCode(97 + col) + (8 - row); // a0 to h8
+        square.textContent = initialPieces[row][col];
+        chessboard.appendChild(square);
+      }
+    }
+
+    // Variables to track selected piece and its position
+    let selectedSquare = null;
+    let selectedPiece = null;
+
+    // Add click event listener to handle piece movement
+    chessboard.addEventListener('click', (event) => {
+      const clickedSquare = event.target;
+
+      if (clickedSquare.classList.contains('square')) {
+        // If a piece is already selected, move it to the clicked square
+        if (selectedSquare) {
+          // Move the piece
+          clickedSquare.textContent = selectedPiece;
+          selectedSquare.textContent = ''; // Clear the original square
+
+          // Reset selection
+          selectedSquare.classList.remove('selected');
+          selectedSquare = null;
+          selectedPiece = null;
+        } else if (clickedSquare.textContent) {
+          // Select a piece if the clicked square has one
+          selectedSquare = clickedSquare;
+          selectedPiece = clickedSquare.textContent;
+          clickedSquare.classList.add('selected');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
