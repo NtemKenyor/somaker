@@ -361,7 +361,7 @@ app.post(MAIN_DIR+'/launch', (req, res) => {
         }
 
         // Return the link to the user
-        const projectLink = `${baseUrl}${MAIN_DIR}/gameProjects/${projectName}`;
+        const projectLink = `${baseUrl}/gameProjects/${projectName}`;
         res.json({ link: projectLink });
     });
 });
