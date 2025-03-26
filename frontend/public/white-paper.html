@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoMaker White Paper & Business Proposal</title>
+    <link rel="icon" type="image/webp" href="src/somaker.webp">
+
     <style>
         
         /* Reset some styles for better cross-browser compatibility */
@@ -49,10 +51,13 @@
             height: auto;
             width: 100%;
             background: #222;
-            padding-top: 20px;
+            /* padding-top: 20px; */
+            padding: 5px;
             z-index: 100;
             transition: all 0.5s ease;
             opacity: 0.75;
+            justify-content: space-around;
+            align-items: center;
         }
 
         .topbar img{
@@ -83,10 +88,10 @@
 
         /* Main Content Styles */
         .main-content {
-            margin-left: 250px;
+            margin-left: 25px;
             transition: margin-left 0.3s;
             padding: 20px;
-            width: 50%;
+            width: 60%;
             /* background: blueviolet; */
             flex: 1; /* Takes up remaining space */
             overflow-y: auto;
@@ -138,6 +143,39 @@
         .section {
             margin-bottom: 20px;
         }
+
+                /* Media Queries for Responsiveness */
+                @media (max-width: 768px) {
+                    .container {
+                        flex-direction: column;
+                        height: auto;
+                    }
+                            
+                    .topbar{
+                        overflow-x: scroll;
+                    }
+
+                    .topbar a{
+                        padding: 5px;
+                        border-right: 2px solid #cce6ff;
+                    }
+
+                    .main-content {
+                        border-left: 7px;
+                        width: 90%;
+                    }
+
+                }
+
+                @media (max-width: 480px) {
+                    .sidebar {
+                        width: 100%;
+                        padding: 15px;
+                    }
+
+                }
+
+
     </style>
 </head>
 <body>

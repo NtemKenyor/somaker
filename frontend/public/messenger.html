@@ -89,10 +89,13 @@
             height: auto;
             width: 100%;
             background: #222;
-            padding-top: 20px;
+            /* padding-top: 20px; */
+            padding: 5px;
             z-index: 100;
             transition: all 0.5s ease;
             opacity: 0.75;
+            justify-content: space-around;
+            align-items: center;
         }
 
         .topbar img{
@@ -194,6 +197,7 @@
             justify-content: space-between;
             background-color: #f7f9fc;
             height: 100%;
+            overflow-y: scroll;
         }
 
         .chat-area h2 {
@@ -337,7 +341,7 @@
                 height: auto;
             }
 
-            .sidebar {
+            /* .sidebar {
                 display: none;
                 position: absolute;
                 top: 0;
@@ -345,7 +349,20 @@
                 width: 300px;
                 z-index: 1000;
             }
+ */
+            
+            .topbar{
+                overflow-x: scroll;
+            }
 
+            .topbar a{
+                padding: 5px;
+                border-right: 2px solid #cce6ff;
+            }
+
+            .sidebar{
+                display: none;
+            }
             .menu-bar {
                 display: block;
                 background-color: #1b1f38;
@@ -361,6 +378,7 @@
 
             .chat-area {
                 padding: 10px;
+                /* display: none; */
             }
 
             .message-input {
@@ -434,16 +452,24 @@
         <div class="main-content">  
             <div class="chat_section_div">
                 <div class="menu-bar" id="d_menu_bar" onclick="toggleTopbar()">☰ Menu</div>
+                <!-- <div class="sidebar" id="d_sidebar">
+                    <h2>Conversations</h2>
+                    <div id="conversations-list">
+                    </div>
+                </div>
+ -->
                 <div class="sidebar" id="d_sidebar">
+                    <button id="close-btn" style="float: right; background: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">X</button>
+                    <br/><br/>
                     <h2>Conversations</h2>
                     <div id="conversations-list">
                         <!-- Conversations will be dynamically inserted here -->
                     </div>
                 </div>
 
-                <div class="chat-area">
+                <div class="chat-area" id="d_chat_area">
                     <h2>
-                        Chat with <span id="active-chat-user">Select a user</span>
+                        Chat <span id="active-chat-user">User</span>
                         <a href="index.html" class="back-button">Back</a>
                     </h2>
                     <div class="the_option_chain">
@@ -591,6 +617,52 @@ async function redirectToPageWithData(pageUrl, publicKey) {
     }
     
 }
+
+function toggleTopbar() {
+    const sidebar = document.querySelector('.sidebar');
+    const chat_area = document.getElementById("d_chat_area");
+    sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+    chat_area.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.getElementById("d_sidebar");
+    const chat_area = document.getElementById("d_chat_area");
+
+    // Close when clicking the close button
+    document.getElementById("close-btn").addEventListener("click", function() {
+        sidebar.style.display = "none";
+
+        const chat_area = document.getElementById("d_chat_area");
+        chat_area.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+
+    });
+
+    // Close when clicking any conversation
+    /* document.querySelectorAll(".conversation").forEach(conversation => {
+        conversation.addEventListener("click", function() {
+            sidebar.style.display = "none";
+
+            const chat_area = document.getElementById("d_chat_area");
+            chat_area.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+
+        });
+    }); */
+    // Event delegation: Listen for clicks on the conversation list
+    document.getElementById("conversations-list").addEventListener("click", function(event) {
+        if (event.target.classList.contains("conversation")) {
+            sidebar.style.display = "none";
+
+            // Ensure d_chat_area exists before trying to modify it
+            if (chatArea) {
+                chatArea.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+    });
+
+    
+});
+
 
 </script>
 

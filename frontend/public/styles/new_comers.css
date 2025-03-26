@@ -96,11 +96,14 @@
 
     /* Category Header */
     .category-header {
-      font-size: 3rem;
+      font-size: 24px;
       font-weight: bold;
       color: var(--primary-red);
       margin-bottom: 20px;
       text-transform: uppercase;
+      /* overflow: scroll */
+      display: flex;
+      justify-content: center;
     }
 
     /* Title */

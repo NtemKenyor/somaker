@@ -38,10 +38,13 @@
             height: auto;
             width: 100%;
             background: #222;
-            padding-top: 20px;
+            /* padding-top: 20px; */
+            padding: 5px;
             z-index: 100;
             transition: all 0.5s ease;
             opacity: 0.75;
+            justify-content: space-around;
+            align-items: center;
         }
 
         .topbar img{
@@ -159,6 +162,15 @@
             }
             .sidebar.active {
                 left: 0;
+            }
+
+            .topbar{
+                overflow-x: scroll;
+            }
+
+            .topbar a{
+                padding: 5px;
+                border-right: 2px solid #cce6ff;
             }
         }
 
