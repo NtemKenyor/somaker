@@ -526,6 +526,17 @@
         let currentProject = null;
         var product_unique_id = "75hfru%r47gjtu5jreno4";
 
+        // Server's public key in PEM format (you should replace this with the actual server public key)
+const serverPublicKeyPem = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1ff4e8iKylXLdXkFyIP
+nXNW0C4dmdwQ5sHDHH/Xan4UWvSw99IYl8eIIjnwrW+C0e2EWmkUBrTCtawg0OTf
+wISkvq09/gR+wqeyXoNxLdN5kZ3eTuJolj3xqAMkT4USo6SDSwWmRTACO55S89c/
+Ysd7EFrpE+pSl9X+1Fl1CpmVFDqprw02gNbK2WgC/tQV/K78PobuY4VPAQouybNh
+KrLkTYqRKkv9dQo6ZgpVKpGaOXBWoLB2ffVKAW8wCWzLESJHC1b51rNi+03MgBJl
+dzTPXfB1KuP5bMo8sPvz6Nb2Zw9vB8rvW/iQnlrLq9OGefQDr2QfxUdQLJVwCBnv
+IQIDAQAB
+-----END PUBLIC KEY-----`;
+
         // Toggle sidebar sections
         function toggleSection(id) {
             const section = document.getElementById(id);

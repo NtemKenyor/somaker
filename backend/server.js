@@ -353,7 +353,8 @@ app.post(MAIN_DIR+'/launch', (req, res) => {
 
         // Determine the base URL based on environment
         let baseUrl;
-        if (process.env.NODE_ENV === 'production' || req.hostname !== 'localhost') {
+        // if (process.env.NODE_ENV === 'production' || req.hostname !== 'localhost') {
+            if (req.hostname !== 'localhost') {
             baseUrl = 'https://roynek.com';
         } else {
             baseUrl = `http://localhost:${PORT}`;
