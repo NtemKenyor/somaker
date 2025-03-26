@@ -351,8 +351,16 @@ app.post(MAIN_DIR+'/launch', (req, res) => {
             return res.status(500).json({ error: 'Failed to save project' });
         }
 
+        // Determine the base URL based on environment
+        let baseUrl;
+        if (process.env.NODE_ENV === 'production' || req.hostname !== 'localhost') {
+            baseUrl = 'https://roynek.com';
+        } else {
+            baseUrl = `http://localhost:${PORT}`;
+        }
+
         // Return the link to the user
-        const projectLink = `http://localhost:${port}/game/${projectName}`;
+        const projectLink = `${baseUrl}${MAIN_DIR}/gameProjects/${projectName}`;
         res.json({ link: projectLink });
     });
 });
